@@ -18,7 +18,7 @@ import { today } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Dashboard() {
-  
+
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const queryParams = useQuery();
@@ -26,7 +26,7 @@ function Dashboard() {
 
   if(!queryParams.has("date")) {
     history.replace(`/dashboard?date=${today()}`)
-  } 
+  }
 
   const [date, setDate] = useState(queryParams.get("date"));
 
@@ -40,7 +40,6 @@ function Dashboard() {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
-
 
   return (
     <main>
