@@ -58,15 +58,44 @@ function bodyOnlyHasRequiredProperties(req, res, next){
 
 function peoplePropertyIsPositive(req, res, next){
   const {data : {people}} = res.locals;
-  if(isNaN(people) || people < 1){
+
+  if(typeof people !== "number" || people < 1){
     return next({
       status: 400,
-      message: `"People" needs to be a positive integer`
+      message: `"people" needs to be a positive integer`
     })
   }
 
   next();
 }
+
+function reservationDateIsValid(req, res, next) {
+  const {data : {reservation_date}} = res.locals;
+  if(isNaN(new Date(reservation_date))){
+    return next({
+      status: 400,
+      message: `"reservation_date" is invalid`
+    })
+  }
+
+  next();
+}
+
+function reservationTimeIsValid(req, res, next) {
+  const {data : {reservation_time}} = res.locals;
+  const regex = new RegExp(/^(?:[01]?[0-9]|2[0-3]):[0-5]?[0-9](?::[0-5]?[0-9])?$/)
+
+  if(!regex.test(reservation_time)){
+    return next({
+      status: 400,
+      message: `"reservation_time" is invalid`
+    })
+  }
+
+  next();
+}
+
+
 
 function bodyHasRequiredProperties(req, res, next) {
   const {data = {}} = req.body;
@@ -91,8 +120,10 @@ module.exports = {
   list: [urlHasDate, asyncErrorBoundary(list)],
   create: [
     bodyHasRequiredProperties,
-    peoplePropertyIsPositive,
     bodyOnlyHasRequiredProperties,
+    peoplePropertyIsPositive,
+    reservationDateIsValid,
+    reservationTimeIsValid,
     asyncErrorBoundary(create),
   ],
 };

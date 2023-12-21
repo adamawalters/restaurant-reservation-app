@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createReservation } from "../utils/api";
 
 function NewReservation() {
-
   const [newReservationError, setNewReservationError] = useState(null);
   const history = useHistory();
   let resAbortController = new AbortController();
@@ -15,42 +14,62 @@ function NewReservation() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: "",
-  }
+    people: null,
+  };
 
-  const [reservationForm, setReservationForm] = useState(defaultReservationForm);
+  const [reservationForm, setReservationForm] = useState(
+    defaultReservationForm
+  );
 
-  function handleChange(event){
-    setReservationForm({
+  function handleChange(event) {
+    if (event.target.name === "people") {
+      setReservationForm({
+        ...reservationForm,
+        [event.target.name]: Number(event.target.value),
+      });
+    } else {
+      setReservationForm({
         ...reservationForm,
         [event.target.name]: event.target.value,
-    })
+      });
+    }
   }
-  
 
   async function submitNewReservation(e) {
     e.preventDefault();
     resAbortController.abort();
     resAbortController = new AbortController();
     try {
-        const response = await createReservation(reservationForm, resAbortController.signal);
-        setReservationForm({...defaultReservationForm});
-        history.push(`/dashboard?date=${response.reservation_date}`)
+      const response = await createReservation(
+        reservationForm,
+        resAbortController.signal
+      );
+      setReservationForm({ ...defaultReservationForm });
+      history.push(`/dashboard?date=${response.reservation_date}`);
     } catch (error) {
-        if(error.name === "AbortError") {
-            //abort request
-        } else {
-            setNewReservationError(error);
-        }
+      if (error.name === "AbortError") {
+        //abort request
+      } else {
+        setNewReservationError(error);
+      }
     }
-
   }
 
- 
+  const submitBtn = (
+    <button type="submit" className="btn btn-primary">
+      Submit
+    </button>
+  );
 
-  const submitBtn = <button type="submit" className="btn btn-primary">Submit</button>;
-
-  const cancelBtn = <button type="button" className="btn btn-danger" onClick={()=>history.goBack()}>Cancel</button>;
+  const cancelBtn = (
+    <button
+      type="button"
+      className="btn btn-danger"
+      onClick={() => history.goBack()}
+    >
+      Cancel
+    </button>
+  );
 
   const form = (
     <form onSubmit={submitNewReservation}>
@@ -61,7 +80,9 @@ function NewReservation() {
           className="form-control"
           id="first_name"
           name="first_name"
-          onInvalid={(e) => e.target.setCustomValidity("Error: please provide a first name")}
+          onInvalid={(e) =>
+            e.target.setCustomValidity("Error: please provide a first name")
+          }
           value={reservationForm.first_name}
           onChange={handleChange}
           required
@@ -74,7 +95,9 @@ function NewReservation() {
           className="form-control"
           id="last_name"
           name="last_name"
-          onInvalid={(e) => e.target.setCustomValidity("Error: please provide a last name")}
+          onInvalid={(e) =>
+            e.target.setCustomValidity("Error: please provide a last name")
+          }
           value={reservationForm.last_name}
           onChange={handleChange}
           required
@@ -99,7 +122,7 @@ function NewReservation() {
           className="form-control"
           id="reservation_date"
           name="reservation_date"
-          placeholder="YYYY-MM-DD" 
+          placeholder="YYYY-MM-DD"
           pattern="\d{4}-\d{2}-\d{2}"
           value={reservationForm.reservation_date}
           onChange={handleChange}
@@ -113,7 +136,7 @@ function NewReservation() {
           className="form-control"
           id="reservation_time"
           name="reservation_time"
-          placeholder="HH:MM" 
+          placeholder="HH:MM"
           pattern="[0-9]{2}:[0-9]{2}"
           value={reservationForm.reservation_time}
           onChange={handleChange}
@@ -134,13 +157,11 @@ function NewReservation() {
         />
       </div>
       <div className="d-md-flex justify-content-between">
-      {submitBtn}
-      {cancelBtn}
+        {submitBtn}
+        {cancelBtn}
       </div>
     </form>
   );
-
-
 
   return (
     <main>

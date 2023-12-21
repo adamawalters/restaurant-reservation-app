@@ -43,7 +43,7 @@ function Dashboard() {
         );
         setReservations(response);
       } catch (error) {
-        console.log(error)
+        console.log(error);
         setReservationsError(error);
       }
     }
