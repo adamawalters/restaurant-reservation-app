@@ -17,6 +17,7 @@ app.use(express.json());
 app.use("/reservations", reservationsRouter);
 
 app.use(notFound);
-app.use(errorHandler);
+app.use(errorHandler.logErrors);
+app.use(errorHandler.errorHandler);
 
 module.exports = app;

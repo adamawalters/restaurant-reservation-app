@@ -1,39 +1,52 @@
 import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { createReservation } from "../utils/api";
 
 function NewReservation() {
+
   const [newReservationError, setNewReservationError] = useState(null);
   const history = useHistory();
-  const [fNameError, setFNameError] = useState(false);
-  const [lNameError, setLNameError] = useState(false);
+  let resAbortController = new AbortController();
 
-  function submitNewReservation(e) {
+  const defaultReservationForm = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: "",
+  }
+
+  const [reservationForm, setReservationForm] = useState(defaultReservationForm);
+
+  function handleChange(event){
+    setReservationForm({
+        ...reservationForm,
+        [event.target.name]: event.target.value,
+    })
+  }
+  
+
+  async function submitNewReservation(e) {
     e.preventDefault();
-    validateForm(e.target);
-    console.log("reservation submitted!")
-  }
-
-  function validateForm(form) {
-   
-    const formData = new FormData(form);
-    let formFirstName = formData.get("first_name");
-    let formLastName = formData.get("last_name")
-
-    if(formFirstName.trim().length === 0) {
-        setFNameError(true);
-    } else {
-        setFNameError(false)
-    }
-    
-    if(formLastName.trim().length === 0) {
-        setLNameError(true)
-    } else {
-        setLNameError(false)
+    resAbortController.abort();
+    resAbortController = new AbortController();
+    try {
+        const response = await createReservation(reservationForm, resAbortController.signal);
+        setReservationForm({...defaultReservationForm});
+        history.push(`/dashboard?date=${response.reservation_date}`)
+    } catch (error) {
+        if(error.name === "AbortError") {
+            //abort request
+        } else {
+            setNewReservationError(error);
+        }
     }
 
-
   }
+
+ 
 
   const submitBtn = <button type="submit" className="btn btn-primary">Submit</button>;
 
@@ -48,9 +61,11 @@ function NewReservation() {
           className="form-control"
           id="first_name"
           name="first_name"
+          onInvalid={(e) => e.target.setCustomValidity("Error: please provide a first name")}
+          value={reservationForm.first_name}
+          onChange={handleChange}
           required
         />
-        {fNameError ?  <span>Enter a first name </span> : null}
       </div>
       <div className="form-group">
         <label htmlFor="last_name"> Last Name </label>
@@ -59,6 +74,9 @@ function NewReservation() {
           className="form-control"
           id="last_name"
           name="last_name"
+          onInvalid={(e) => e.target.setCustomValidity("Error: please provide a last name")}
+          value={reservationForm.last_name}
+          onChange={handleChange}
           required
         />
       </div>
@@ -69,6 +87,8 @@ function NewReservation() {
           className="form-control"
           id="mobile_number"
           name="mobile_number"
+          value={reservationForm.mobile_number}
+          onChange={handleChange}
           required
         />
       </div>
@@ -81,6 +101,8 @@ function NewReservation() {
           name="reservation_date"
           placeholder="YYYY-MM-DD" 
           pattern="\d{4}-\d{2}-\d{2}"
+          value={reservationForm.reservation_date}
+          onChange={handleChange}
           required
         />
       </div>
@@ -93,6 +115,8 @@ function NewReservation() {
           name="reservation_time"
           placeholder="HH:MM" 
           pattern="[0-9]{2}:[0-9]{2}"
+          value={reservationForm.reservation_time}
+          onChange={handleChange}
           required
         />
       </div>
@@ -104,11 +128,15 @@ function NewReservation() {
           id="people"
           name="people"
           min="1"
+          value={reservationForm.people}
+          onChange={handleChange}
           required
         />
       </div>
+      <div className="d-md-flex justify-content-between">
       {submitBtn}
       {cancelBtn}
+      </div>
     </form>
   );
 

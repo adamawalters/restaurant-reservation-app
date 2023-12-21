@@ -18,27 +18,53 @@ import { today } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Dashboard() {
-
-  const [reservations, setReservations] = useState([]);
+  const [reservations, setReservations] = useState(null);
   const [reservationsError, setReservationsError] = useState(null);
   const queryParams = useQuery();
   const history = useHistory();
 
-  if(!queryParams.has("date")) {
-    history.replace(`/dashboard?date=${today()}`)
+  if (!queryParams.has("date")) {
+    history.replace(`/dashboard?date=${today()}`);
+    queryParams.set("date", today())
   }
 
   const [date, setDate] = useState(queryParams.get("date"));
 
-  useEffect(loadDashboard, [date]);
-
-  function loadDashboard() {
+  useEffect(() => {
+    setReservations(null);
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
+
+    async function loadDashboard() {
+      try {
+        const response = await listReservations(
+          { date },
+          abortController.signal
+        );
+        setReservations(response);
+      } catch (error) {
+        console.log(error)
+        setReservationsError(error);
+      }
+    }
+
+    loadDashboard();
+
     return () => abortController.abort();
+  }, [date]);
+
+  if (reservations) {
+    return (
+      <main>
+        <h1>Dashboard</h1>
+        <div className="d-md-flex mb-3">
+          <h4 className="mb-0">Reservations for date</h4>
+        </div>
+       <ErrorAlert error={reservationsError} />
+        <ReservationListNav date={date} setDate={setDate} />
+        <ReservationList reservations={reservations} />
+      </main>
+    );
   }
 
   return (
@@ -47,11 +73,16 @@ function Dashboard() {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
       </div>
-      <ErrorAlert error={reservationsError} />
-       <ReservationListNav date={date} setDate={setDate}/>
-      <ReservationList reservations={reservations} date={date}/>
+     <ErrorAlert error={reservationsError} /> 
+      <ReservationListNav date={date} setDate={setDate} />
+      <div className="d-flex justify-content-center">
+        <h2 className="font-italic">Reservations loading </h2>
+      </div>
     </main>
   );
+
 }
+
+
 
 export default Dashboard;

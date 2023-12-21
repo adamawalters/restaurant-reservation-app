@@ -1,7 +1,7 @@
 import React from "react";
 import ReservationRow from "./ReservationRow";
 
-function ReservationList({ reservations , date }) {
+function ReservationList({ reservations }) {
   const tableHeader = (
     <tr>
       <th>ID</th>
@@ -14,11 +14,8 @@ function ReservationList({ reservations , date }) {
     </tr>
   );
 
-  const reservationsForDate = reservations.filter((reservation) => {
-    return reservation.reservation_date === date;
-  })
 
-  const reservationRows = reservationsForDate.map((reservation) => {
+  const reservationRows = reservations.map((reservation) => {
     return (
       <ReservationRow
         key={reservation.reservation_id}
