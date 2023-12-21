@@ -14,7 +14,7 @@ function NewReservation() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: null,
+    people: "",
   };
 
   const [reservationForm, setReservationForm] = useState(
@@ -22,23 +22,48 @@ function NewReservation() {
   );
 
   function handleChange(event) {
-    if (event.target.name === "people") {
-      setReservationForm({
-        ...reservationForm,
-        [event.target.name]: Number(event.target.value),
-      });
-    } else {
-      setReservationForm({
-        ...reservationForm,
-        [event.target.name]: event.target.value,
-      });
-    }
+    setReservationForm({
+      ...reservationForm,
+      [event.target.name]: event.target.value,
+    });
   }
 
-  async function submitNewReservation(e) {
+  function validateReservation(e) {
     e.preventDefault();
+    setNewReservationError(null);
+
+    const dateString = `${reservationForm.reservation_date}T${reservationForm.reservation_time}`;
+    const reservationDate = new Date(dateString);
+    const day = reservationDate.getDay();
+    const hour = reservationDate.getHours();
+    const minutes = reservationDate.getMinutes();
+    let errorString = "";
+
+    if (reservationDate.getTime() < new Date().getTime()) {
+      errorString += `Reservation must be in the future.`;
+    }
+
+    if (day === 2) {
+      errorString += `No reservations on Tuesdays. `;
+    }
+
+    if ((hour === 10 && minutes < 30) || hour < 10) {
+      errorString += `Restaurant opens at 10:30 AM. `;
+    }
+
+    if ((hour === 21 && minutes > 30) || hour > 21) {
+      errorString += `Last reservation is at 9:30 PM. `;
+    }
+
+    errorString
+      ? setNewReservationError({ message: errorString })
+      : submitNewReservation();
+  }
+
+  async function submitNewReservation() {
     resAbortController.abort();
     resAbortController = new AbortController();
+
     try {
       const response = await createReservation(
         reservationForm,
@@ -47,11 +72,7 @@ function NewReservation() {
       setReservationForm({ ...defaultReservationForm });
       history.push(`/dashboard?date=${response.reservation_date}`);
     } catch (error) {
-      if (error.name === "AbortError") {
-        //abort request
-      } else {
-        setNewReservationError(error);
-      }
+      setNewReservationError(error);
     }
   }
 
@@ -72,7 +93,7 @@ function NewReservation() {
   );
 
   const form = (
-    <form onSubmit={submitNewReservation}>
+    <form onSubmit={validateReservation}>
       <div className="form-group">
         <label htmlFor="first_name"> First Name </label>
         <input

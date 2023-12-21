@@ -4,9 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "../reservations/ReservationList";
 import ReservationListNav from "../ui-elements/ReservationListNav";
 import useQuery from "../utils/useQuery";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import {
-  Redirect,
   useHistory,
 } from "react-router-dom/cjs/react-router-dom.min";
 import { today } from "../utils/date-time";
@@ -43,7 +41,6 @@ function Dashboard() {
         );
         setReservations(response);
       } catch (error) {
-        console.log(error);
         setReservationsError(error);
       }
     }
