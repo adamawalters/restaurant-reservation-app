@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createReservation } from "../utils/api";
+import ReservationForm from "./ReservationForm";
+
 
 function NewReservation() {
   const [newReservationError, setNewReservationError] = useState(null);
@@ -32,19 +34,20 @@ function NewReservation() {
     e.preventDefault();
     setNewReservationError(null);
 
-    const dateString = `${reservationForm.reservation_date}T${reservationForm.reservation_time}`;
-    const reservationDate = new Date(dateString);
-    const day = reservationDate.getDay();
-    const hour = reservationDate.getHours();
-    const minutes = reservationDate.getMinutes();
+    const [year, month, day] = reservationForm.reservation_date.split("-")
+    const [hour, minutes] = reservationForm.reservation_time.split(":").map((time) => Number(time));
+
+    const reservationDate = new Date(year, month-1, day);
+    const weekDay = reservationDate.getDay();
+    
     let errorString = "";
 
     if (reservationDate.getTime() < new Date().getTime()) {
       errorString += `Reservation must be in the future.`;
     }
 
-    if (day === 2) {
-      errorString += `No reservations on Tuesdays. `;
+    if (weekDay === 2) {
+      errorString += `No reservations on Tuesdays as the restaurant is closed. `;
     }
 
     if ((hour === 10 && minutes < 30) || hour < 10) {
@@ -59,6 +62,7 @@ function NewReservation() {
       ? setNewReservationError({ message: errorString })
       : submitNewReservation();
   }
+
 
   async function submitNewReservation() {
     resAbortController.abort();
@@ -76,114 +80,6 @@ function NewReservation() {
     }
   }
 
-  const submitBtn = (
-    <button type="submit" className="btn btn-primary">
-      Submit
-    </button>
-  );
-
-  const cancelBtn = (
-    <button
-      type="button"
-      className="btn btn-danger"
-      onClick={() => history.goBack()}
-    >
-      Cancel
-    </button>
-  );
-
-  const form = (
-    <form onSubmit={validateReservation}>
-      <div className="form-group">
-        <label htmlFor="first_name"> First Name </label>
-        <input
-          type="text"
-          className="form-control"
-          id="first_name"
-          name="first_name"
-          onInvalid={(e) =>
-            e.target.setCustomValidity("Error: please provide a first name")
-          }
-          value={reservationForm.first_name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="last_name"> Last Name </label>
-        <input
-          type="text"
-          className="form-control"
-          id="last_name"
-          name="last_name"
-          onInvalid={(e) =>
-            e.target.setCustomValidity("Error: please provide a last name")
-          }
-          value={reservationForm.last_name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="mobile_number">Mobile Number</label>
-        <input
-          type="tel"
-          className="form-control"
-          id="mobile_number"
-          name="mobile_number"
-          value={reservationForm.mobile_number}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="reservation_date"> Reservation Date </label>
-        <input
-          type="date"
-          className="form-control"
-          id="reservation_date"
-          name="reservation_date"
-          placeholder="YYYY-MM-DD"
-          pattern="\d{4}-\d{2}-\d{2}"
-          value={reservationForm.reservation_date}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="reservation_time">Reservation Time </label>
-        <input
-          type="time"
-          className="form-control"
-          id="reservation_time"
-          name="reservation_time"
-          placeholder="HH:MM"
-          pattern="[0-9]{2}:[0-9]{2}"
-          value={reservationForm.reservation_time}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="people"> Number of Guests </label>
-        <input
-          type="number"
-          className="form-control"
-          id="people"
-          name="people"
-          min="1"
-          value={reservationForm.people}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="d-md-flex justify-content-between">
-        {submitBtn}
-        {cancelBtn}
-      </div>
-    </form>
-  );
-
   return (
     <main>
       <h1>New Reservation</h1>
@@ -191,9 +87,14 @@ function NewReservation() {
         <h4 className="mb-0">Create a new reservation</h4>
       </div>
       <ErrorAlert error={newReservationError} />
-      {form}
+      <ReservationForm history={history} reservationForm={reservationForm} handleChange={handleChange} submitHandler={validateReservation}/>
     </main>
   );
+  
+
 }
+
+
+  
 
 export default NewReservation;

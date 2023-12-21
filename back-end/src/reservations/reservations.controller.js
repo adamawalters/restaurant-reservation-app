@@ -33,7 +33,7 @@ function urlHasDate(req, res, next) {
 
   return next({
     status: 400,
-    message: `URL must contain date to list reservations`
+    message: `URL must contain a date in the query parameters to list reservations`
   })
 
 }
@@ -62,7 +62,7 @@ function peoplePropertyIsPositive(req, res, next){
   if(typeof people !== "number" || people < 1){
     return next({
       status: 400,
-      message: `"people" needs to be a positive integer`
+      message: `"people (number of guests) " needs to be a positive integer`
     })
   }
 
@@ -74,7 +74,7 @@ function reservationDateIsValid(req, res, next) {
   if(isNaN(new Date(reservation_date))){
     return next({
       status: 400,
-      message: `"reservation_date" is invalid`
+      message: `"reservation_date" is invalid - should be YYYY-MM-DD`
     })
   }
 
@@ -88,11 +88,45 @@ function reservationTimeIsValid(req, res, next) {
   if(!regex.test(reservation_time)){
     return next({
       status: 400,
-      message: `"reservation_time" is invalid`
+      message: `"reservation_time" is invalid - should be HH:MM:SS`
     })
   }
 
   next();
+}
+
+function reservationIsFutureAndRestaurantIsOpen(req, res, next) {
+    const {data: {reservation_date, reservation_time}} = res.locals;
+
+    const [year, month, day] = reservation_date.split("-")
+    const [hour, minutes] = reservation_time.split(":").map((time) => Number(time));
+
+    const reservationDate = new Date(year, month-1, day);
+    const weekDay = reservationDate.getDay();
+
+    let errorString = "";
+
+    if (reservationDate.getTime() < new Date().getTime()) {
+      errorString += `Reservation must be in the future.`;
+    }
+
+    if (weekDay === 2) {
+      errorString += `No reservations on Tuesdays as the restaurant is closed. `;
+    }
+
+    if ((hour === 10 && minutes < 30) || hour < 10) {
+      errorString += `Restaurant opens at 10:30 AM. `;
+    }
+
+    if ((hour === 21 && minutes > 30) || hour > 21) {
+      errorString += `Last reservation is at 9:30 PM. `;
+    }
+
+    errorString ?  next({
+        status: 400,
+        message: errorString
+      }) : next();
+
 }
 
 
@@ -124,6 +158,7 @@ module.exports = {
     peoplePropertyIsPositive,
     reservationDateIsValid,
     reservationTimeIsValid,
+    reservationIsFutureAndRestaurantIsOpen,
     asyncErrorBoundary(create),
   ],
 };
