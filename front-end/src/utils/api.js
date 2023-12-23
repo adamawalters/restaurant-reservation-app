@@ -43,6 +43,7 @@ async function fetchJson(url, options, onCancel) {
       return Promise.reject({ message: payload.error });
     }
     return payload.data;
+
   } catch (error) {
     if (error.name !== "AbortError") {
       console.error(error.stack);
@@ -106,6 +107,12 @@ export async function createTable(tableForm, signal){
 
   return response;
 
+}
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const response = await fetchJson(url, { headers, method: "GET", signal }, []);
+  return response;
 }
 
 

@@ -8,6 +8,7 @@ import {
   useHistory,
 } from "react-router-dom/cjs/react-router-dom.min";
 import { today } from "../utils/date-time";
+import TableList from "../table/TableList";
 
 /**
  * Defines the dashboard page.
@@ -60,6 +61,7 @@ function Dashboard() {
        <ErrorAlert error={reservationsError} />
         <ReservationListNav date={date} setDate={setDate} />
         <ReservationList reservations={reservations} />
+        <TableList />
       </main>
     );
   }
