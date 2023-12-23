@@ -15,7 +15,7 @@ function TableForm({tableForm, history, handleChange, submitHandler}){
               name="table_name"
               value={tableForm.table_name}
               onChange={handleChange}
-              minlength="2"
+              minLength="2"
               required
             />
           </div>

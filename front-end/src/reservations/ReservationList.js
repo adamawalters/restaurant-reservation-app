@@ -11,6 +11,7 @@ function ReservationList({ reservations }) {
       <th>Reservation Date</th>
       <th>Reservation Time</th>
       <th>People</th>
+      <th></th>
     </tr>
   );
 

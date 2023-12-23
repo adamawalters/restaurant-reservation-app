@@ -67,7 +67,6 @@ function NewReservation() {
   async function submitNewReservation() {
     resAbortController.abort();
     resAbortController = new AbortController();
-
     try {
       const response = await createReservation(
         reservationForm,

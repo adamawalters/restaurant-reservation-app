@@ -88,3 +88,25 @@ export async function createReservation(reservationForm, signal) {
   return response;
 }
 
+
+export async function createTable(tableForm, signal){
+
+  tableForm.capacity = Number(tableForm.capacity);
+
+  const url = new URL(`${API_BASE_URL}/tables`);
+
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({data: tableForm}),
+    signal
+  }
+
+  const response = await fetchJson(url, options, {});
+
+  return response;
+
+}
+
+
+

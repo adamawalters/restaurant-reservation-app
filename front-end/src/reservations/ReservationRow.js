@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 function ReservationRow({ reservation }) {
   return (
@@ -10,6 +11,9 @@ function ReservationRow({ reservation }) {
       <td>{reservation.reservation_date}</td>
       <td>{reservation.reservation_time}</td>
       <td>{reservation.people}</td>
+      <td>
+        <Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>
+      </td>
     </tr>
   );
 }

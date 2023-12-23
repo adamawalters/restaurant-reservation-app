@@ -22,6 +22,7 @@ async function create(req, res) {
 /*Validation functions  */
 
 
+
 function urlHasDate(req, res, next) {
 
   const {date} = req.query;
@@ -33,7 +34,7 @@ function urlHasDate(req, res, next) {
 
   return next({
     status: 400,
-    message: `URL must contain a date in the query parameters to list reservations`
+    message: `URL must contain a date in the query parameters to list reservations.`
   })
 
 }
@@ -62,7 +63,7 @@ function peoplePropertyIsPositive(req, res, next){
   if(typeof people !== "number" || people < 1){
     return next({
       status: 400,
-      message: `"people (number of guests) " needs to be a positive integer`
+      message: `"people (number of guests) " needs to be a positive integer.`
     })
   }
 
@@ -138,7 +139,7 @@ function bodyHasRequiredProperties(req, res, next) {
     if(!data[property]) {
       return next({
         status: 400,
-        message: `Body needs "${property}" property.`
+        message: `Body needs a "${property}" property.`
       })
     }
   })
