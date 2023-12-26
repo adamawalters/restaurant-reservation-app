@@ -15,7 +15,6 @@ function ReservationList({ reservations }) {
     </tr>
   );
 
-
   const reservationRows = reservations.map((reservation) => {
     return (
       <ReservationRow
@@ -26,15 +25,13 @@ function ReservationList({ reservations }) {
   });
 
   return (
-    <table className="table table-striped table-hover">
-      <caption>List of reservations</caption>
-      <thead>
-        {tableHeader}
-      </thead>
-      <tbody>
-        {reservationRows}
-        </tbody>
-    </table>
+    <div className="overflow-scroll" style={{maxHeight: "300px"}}>
+      <table className="table table-striped table-hover table-sm">
+        <caption>List of reservations</caption>
+        <thead>{tableHeader}</thead>
+        <tbody>{reservationRows}</tbody>
+      </table>
+    </div>
   );
 }
 

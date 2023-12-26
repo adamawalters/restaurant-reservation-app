@@ -53,14 +53,17 @@ function Dashboard() {
 
   if (reservations) {
     return (
-      <main>
+      <main style={{height: "100%", overflow: "hidden"}}>
         <h1>Dashboard</h1>
-        <div className="d-md-flex mb-3">
-          <h4 className="mb-0">Reservations for date</h4>
+        <ErrorAlert error={reservationsError} />
+        <div className="d-md-flex mb-3 justify-content-center">
+          <h4 className="mb-0">Reservations for {date}</h4>
         </div>
-       <ErrorAlert error={reservationsError} />
         <ReservationListNav date={date} setDate={setDate} />
         <ReservationList reservations={reservations} />
+        <div className="d-md-flex mb-3 justify-content-center">
+          <h4 className="mb-0">Restaurant Table Status</h4>
+        </div>
         <TableList />
       </main>
     );

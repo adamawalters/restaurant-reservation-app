@@ -3,26 +3,24 @@ import { listTables } from "../utils/api";
 import TableRow from "./TableRow";
 
 function TableList() {
+  const [tables, setTables] = useState([]);
 
-   const [tables, setTables] = useState([]);
-
-   useEffect(()=>{
-
+  useEffect(() => {
     const abortController = new AbortController();
 
-    async function loadTables(){
-        try {
-            const response = await listTables(abortController.signal);
-            setTables(response);
-        } catch(error) {
-            console.log(`Table Error!`)
-        }
+    async function loadTables() {
+      try {
+        const response = await listTables(abortController.signal);
+        setTables(response);
+      } catch (error) {
+        console.log(`Table Error!`);
+      }
     }
 
     loadTables();
 
     return () => abortController.abort();
-   }, [])
+  }, []);
 
   const tableHeader = (
     <tr>
@@ -33,24 +31,22 @@ function TableList() {
     </tr>
   );
 
-  //return <h1>NULL</h1>
-
   const tableRows = tables.map((table) => {
-    return (
-      <TableRow
-        key={table.table_id}
-        table={table}
-      />
-    );
+    return <TableRow key={table.table_id} table={table} />;
   });
 
   return (
-    <table className="table table-striped table-hover">
-      <caption>List of tables</caption>
-      <thead>{tableHeader}</thead>
-      <tbody>{tableRows}</tbody>
-    </table>
-  ); 
+    <div style={{maxHeight: "250px", overflow: "auto"}}>
+      <table
+        className="table table-striped table-hover table-sm"
+        style={{ height: "100px"}}
+      >
+        <caption>List of tables</caption>
+        <thead>{tableHeader}</thead>
+        <tbody>{tableRows}</tbody>
+      </table>
+    </div>
+  );
 }
 
 export default TableList;
