@@ -20,7 +20,6 @@ function read(reservation_id) {
     return knex("reservations")
             .select("*")
             .where({reservation_id : reservation_id})
-            .then((response) => response[0])
         }
 
 

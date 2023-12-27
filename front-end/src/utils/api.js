@@ -35,7 +35,7 @@ async function fetchJson(url, options, onCancel) {
 
     if (response.status === 204) {
       return null;
-    } 
+    }
 
     const payload = await response.json();
 
@@ -43,12 +43,11 @@ async function fetchJson(url, options, onCancel) {
       return Promise.reject({ message: payload.error });
     }
     return payload.data;
-
   } catch (error) {
     if (error.name !== "AbortError") {
       console.error(error.stack);
       throw error;
-    } 
+    }
     return Promise.resolve(onCancel);
   }
 }
@@ -69,9 +68,29 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+/**
+ * Retrieves all existing reservation.
+ * @returns {Promise<[reservation]>}
+ *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ */
 
+export async function listReservation(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+
+/**
+ * Creates a reservation.
+ * @param reservationForm
+ * The data to use to create the reservation
+ * @param signal
+ * The AbortController signal
+ * @returns {Promise<{reservation}>}
+ *  a promise that resolves to a reservation saved in the database with additional reservation_id, created_at, and updated_at fields.
+ */
 export async function createReservation(reservationForm, signal) {
-
   reservationForm.people = Number(reservationForm.people);
 
   const url = new URL(`${API_BASE_URL}/reservations`);
@@ -79,41 +98,93 @@ export async function createReservation(reservationForm, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({data: reservationForm}),
-    signal
-  }
-  let response = await fetchJson(url, options, {})
+    body: JSON.stringify({ data: reservationForm }),
+    signal,
+  };
+  let response = await fetchJson(url, options, {});
   response = formatReservationDate(response);
   response = formatReservationTime(response);
 
   return response;
 }
 
-
-export async function createTable(tableForm, signal){
-
+/**
+ * Creates a table.
+ * @param tableForm
+ * The data to use to create the table (an object with table_name and capacity fields)
+ * @param signal
+ * The AbortController signal
+ * @returns {Promise<{table}>}
+ *  a promise that resolves to a table saved in the database with additional table_id, reservation_id, created_at, and updated_at fields.
+ */
+export async function createTable(tableForm, signal) {
   tableForm.capacity = Number(tableForm.capacity);
-
   const url = new URL(`${API_BASE_URL}/tables`);
 
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({data: tableForm}),
-    signal
-  }
+    body: JSON.stringify({ data: tableForm }),
+    signal,
+  };
 
   const response = await fetchJson(url, options, {});
 
   return response;
-
 }
 
+/**
+ * Lists table in database.
+ * @param signal
+ * The AbortController signal
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of tables saved in the database.
+ */
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   const response = await fetchJson(url, { headers, method: "GET", signal }, []);
   return response;
 }
 
+/**
+ * Lists available table in database.
+ * @param signal
+ * The AbortController signal
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of available tables saved in the database.
+ */
+export async function listAvailableTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables?available=true`);
+  const response = await fetchJson(url, { headers, method: "GET", signal }, []);
+  return response;
+}
 
-
+/**
+ * Adds reservation to  table in database.
+ * @param table_id
+ * The table_id to which the reservation will be assigned
+ * @param reservation_id
+ * The reservation_id that will be assigned to the table
+ * @param signal
+ * The AbortController signal
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of available tables saved in the database.
+ */
+export async function updateTable(table_id, reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const response = await fetchJson(
+    url,
+    {
+      headers,
+      method: "PUT",
+      body: JSON.stringify({
+        data: {
+          reservation_id: reservation_id
+        },
+      }),
+      signal,
+    },
+    []
+  );
+  return response;
+}

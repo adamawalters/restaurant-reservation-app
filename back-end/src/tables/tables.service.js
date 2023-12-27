@@ -7,6 +7,13 @@ function list(){
 
 }
 
+function listAvailable(){
+    return knex("tables")
+        .select("*")
+        .orderBy("table_name")
+        .where({reservation_id : null})
+}
+
 function read(table_id) {
     return knex("tables")
                 .select("*")
@@ -43,6 +50,7 @@ function readReservation(reservation_id) {
 
 module.exports = {
     list,
+    listAvailable,
     create,
     read,
     update,

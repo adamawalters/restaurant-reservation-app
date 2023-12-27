@@ -12,6 +12,13 @@ async function list(req, res) {
   });
 }
 
+async function read(req, res) {
+  const {reservation_id} = req.params;
+  res.json({
+    data : await service.read(reservation_id)
+  })
+}
+
 async function create(req, res) {
   const {data} = res.locals;
   const response = await service.create(data);
@@ -162,4 +169,5 @@ module.exports = {
     reservationIsFutureAndRestaurantIsOpen,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(read)]
 };
