@@ -74,6 +74,18 @@ function bodyOnlyHasRequiredProperties(propertiesList) {
   };
 }
 
+function tableCapacityIsANumber(req, res, next) {
+  const {data : {capacity}} = res.locals;
+  if(typeof capacity !== "number" || isNaN(capacity)){
+    return next({
+      status: 400,
+      message: `capacity must be a number`
+    })
+  }
+
+  next();
+}
+
 async function tableExists(req, res, next) {
   const { table_id } = req.params;
 
@@ -114,7 +126,7 @@ function tableSeatsReservation(req, res, next) {
   if (reservation.people > table.capacity) {
     return next({
       status: 400,
-      message: `Table ${table.table_id} seats ${table.capacity} but reservation is for ${reservation.people} people.`,
+      message: `Table ${table.table_id} has capacity ${table.capacity} but reservation is for ${reservation.people} people.`,
     });
   }
 
@@ -166,6 +178,7 @@ module.exports = {
     bodyHasRequiredProperties(requiredProperties),
     bodyOnlyHasRequiredProperties(requiredProperties),
     tableNameIsTwoCharsOrMore,
+    tableCapacityIsANumber,
     tableCapacityIsAtLeastOne,
     asyncErrorBoundary(create),
   ],
