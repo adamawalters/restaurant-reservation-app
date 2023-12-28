@@ -1,14 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { removeReservationFromTable } from "../utils/api";
+import { removeReservationFromTable, updateReservationStatus } from "../utils/api";
 
-function TableRow({ table, setTables }) {
+function TableRow({ table, setTables, setUpdateReservations }) {
+
 
   async function handleFinish(e){
     const canFinish = window.confirm(`Is this table ready to seat new guests? This cannot be undone.`);
     if(canFinish) {
       await removeReservationFromTable(table.table_id);
       setTables((current) => !current)
+      await updateReservationStatus(table.reservation_id, "finished")
+      setUpdateReservations((current) => !current)
+
     }
   }
 

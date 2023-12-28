@@ -11,21 +11,24 @@ function ReservationList({ reservations }) {
       <th>Reservation Date</th>
       <th>Reservation Time</th>
       <th>People</th>
+      <th>Reservation Status</th>
       <th></th>
     </tr>
   );
 
-  const reservationRows = reservations.map((reservation) => {
-    return (
-      <ReservationRow
-        key={reservation.reservation_id}
-        reservation={reservation}
-      />
-    );
-  });
+  const reservationRows = reservations
+    .filter((reservation) => reservation.status !== "finished")
+    .map((reservation) => {
+      return (
+        <ReservationRow
+          key={reservation.reservation_id}
+          reservation={reservation}
+        />
+      );
+    });
 
   return (
-    <div className="overflow-scroll" style={{maxHeight: "300px"}}>
+    <div className="overflow-scroll" style={{ maxHeight: "300px" }}>
       <table className="table table-striped table-hover table-sm">
         <caption>List of reservations</caption>
         <thead>{tableHeader}</thead>

@@ -192,27 +192,58 @@ export async function updateTable(table_id, reservation_id, signal) {
 
 /**
  * Deletes reservation from  table in database.
- * @param table_id
- * The table_id to which the reservation will be assigned
+ * @param tableID
+ * The tableID to which the reservation will be assigned
 
  * @param signal
  * The AbortController signal
  * @returns null
  */
-export async function removeReservationFromTable(table_id, signal){
-  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
-  const response = await fetchJson(
+export async function removeReservationFromTable(tableID, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${tableID}/seat`);
+  await fetchJson(
     url,
     {
       headers,
       method: "DELETE",
       body: JSON.stringify({
         data: {
-          table_id: table_id
+          table_id: tableID
         },
       }),
       signal,
     },
     []
   );
+}
+
+/**
+ * Updates reservation status.
+ * @param reservationID
+ * The reservation that will be updated
+ * 
+ * @param newStatus
+ * A string for the new status of the reservation (either "booked", "seated", or "finished")
+
+ * @param signal
+ * The AbortController signal
+ * @returns null
+ */
+export async function updateReservationStatus(reservationID, newStatus, signal ) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationID}/status`);
+  const response = await fetchJson(
+    url,
+    {
+      headers,
+      method: "PUT",
+      body: JSON.stringify({
+        data: {
+          status: newStatus
+        },
+      }),
+      signal,
+    },
+    []
+  );
+  return response;
 }

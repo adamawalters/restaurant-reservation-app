@@ -19,6 +19,7 @@ import TableList from "../table/TableList";
 function Dashboard() {
   const [reservations, setReservations] = useState(null);
   const [reservationsError, setReservationsError] = useState(null);
+  const [updateReservations, setUpdateReservations] = useState(false);
   const queryParams = useQuery();
   const history = useHistory();
 
@@ -49,7 +50,7 @@ function Dashboard() {
     loadDashboard();
 
     return () => abortController.abort();
-  }, [date]);
+  }, [date, updateReservations]);
 
   if (reservations) {
     return (
@@ -64,7 +65,7 @@ function Dashboard() {
         <div className="d-md-flex mb-3 justify-content-center">
           <h4 className="mb-0">Restaurant Table Status</h4>
         </div>
-        <TableList />
+        <TableList setUpdateReservations={setUpdateReservations}/>
       </main>
     );
   }

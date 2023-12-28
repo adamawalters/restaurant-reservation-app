@@ -39,11 +39,13 @@ function NewReservation() {
 
     const reservationDate = new Date(year, month-1, day);
     const weekDay = reservationDate.getDay();
-    
+    const now = new Date();
+    now.setHours(0,0,0,0)
+
     let errorString = "";
 
-    if (reservationDate.getTime() < new Date().getTime()) {
-      errorString += `Reservation must be in the future.`;
+    if (reservationDate.getTime() < now.getTime()) {
+      errorString += `Front end validation: Reservation must be in the future.`;
     }
 
     if (weekDay === 2) {

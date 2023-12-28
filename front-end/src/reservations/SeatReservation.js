@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   listAvailableTables,
   listReservation,
+  updateReservationStatus,
   updateTable,
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -29,6 +30,7 @@ function SeatReservation() {
         reservation_id,
         submissionAbortController.signal
       );
+
       history.push("/");
     } catch (error) {
       setTablesError(error);
@@ -54,6 +56,7 @@ function SeatReservation() {
     setSelectedTableID(e.target.value);
   }
 
+  /*Load reservation list */
   useEffect(() => {
     const abortController = new AbortController();
     async function loadReservation() {
@@ -71,6 +74,7 @@ function SeatReservation() {
     return () => abortController.abort();
   }, [reservation_id]);
 
+  /* Load available tables from DB */
   useEffect(() => {
     const abortController = new AbortController();
     async function loadAvailableTables() {

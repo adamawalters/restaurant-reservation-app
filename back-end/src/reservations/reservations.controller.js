@@ -26,6 +26,15 @@ async function create(req, res) {
   res.status(201).json({ data: response });
 }
 
+async function updateStatus(req, res){
+  const {reservation} = res.locals;
+  const {status} = res.locals;
+  const response = await service.updateStatus(reservation.reservation_id, status)
+  res.json({
+    data : response
+  })
+}
+
 /*Validation functions  */
 
 function urlHasDate(req, res, next) {
@@ -125,10 +134,12 @@ function reservationIsFutureAndRestaurantIsOpen(req, res, next) {
 
   const reservationDate = new Date(year, month - 1, day);
   const weekDay = reservationDate.getDay();
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
 
   let errorString = "";
 
-  if (reservationDate.getTime() < new Date().getTime()) {
+  if (reservationDate.getTime() < now.getTime()) {
     errorString += `Reservation must be in the future.`;
   }
 
@@ -177,6 +188,7 @@ async function reservationExists(req, res, next) {
   const response = await service.read(reservation_id);
 
   if (response) {
+    res.locals.reservation = response;
     return next();
   }
 
@@ -184,6 +196,22 @@ async function reservationExists(req, res, next) {
     status: 404,
     message: `Reservation ${reservation_id} does not exist.`,
   });
+}
+
+const validReservationStatuses = ["booked", "seated", "finished"];
+const requiredReservationStatusProperties = ["status"];
+
+async function reservationStatusIsValid(req, res, next) {
+  const { data: {status} } = req.body;
+  if (!validReservationStatuses.includes(status)) {
+    return next({
+      status: 400,
+      message: `Reservation status "${status}" is invalid.`,
+    });
+  }
+  res.locals.status = status;
+  next();
+
 }
 
 module.exports = {
@@ -197,6 +225,11 @@ module.exports = {
     reservationIsFutureAndRestaurantIsOpen,
     asyncErrorBoundary(create),
   ],
-  read: [asyncErrorBoundary(reservationExists) , asyncErrorBoundary(read)],
-  updateStatus: [asyncErrorBoundary(reservationExists)],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    bodyHasRequiredProperties(requiredReservationStatusProperties),
+    asyncErrorBoundary(reservationStatusIsValid),
+    updateStatus,
+  ],
 };

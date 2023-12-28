@@ -37,16 +37,25 @@ function deleteReservation(table_id){
 
 }
 
-function update(reservation_id, table_id){
-    return knex("tables")
+async function update(reservation_id, table_id){
+    const response = await knex("tables")
+        .update({
+            reservation_id: reservation_id
+        })
+        .where({
+            table_id: table_id
+        })
+        .returning("*")
+
+    await knex("reservations")
             .update({
-                reservation_id : reservation_id
+                status : "seated"
             })
             .where({
-                table_id : table_id
+                reservation_id: reservation_id
             })
-            .returning("*")
-            .then((response) => response[0])
+
+    return response[0];
 }
 
 function readReservation(reservation_id) {

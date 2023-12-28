@@ -117,6 +117,10 @@ describe("US-06 - Reservation status - E2E", () => {
       });
 
       await page.click(finishButtonSelector);
+      await page.screenshot({
+        path: ".screenshots/us-06-finish-dialog.png",
+        fullPage: true,
+      });
 
       await page.waitForResponse((response) => {
         return response.url().endsWith(`/tables`);
