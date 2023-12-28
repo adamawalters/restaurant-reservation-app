@@ -43,7 +43,7 @@ async function deleteReservation(req, res){
 
 /*Validation functions  */
 
-const requiredProperties = ["table_name", "capacity", "reservation_id"];
+const requiredProperties = ["table_name", "capacity"];
 const requiredReservationProperties = ["reservation_id"];
 
 function bodyHasRequiredProperties(propertiesList) {
@@ -197,7 +197,7 @@ module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
     bodyHasRequiredProperties(requiredProperties),
-    bodyOnlyHasRequiredProperties(requiredProperties),
+    //bodyOnlyHasRequiredProperties(requiredProperties),
     tableNameIsTwoCharsOrMore,
     tableCapacityIsANumber,
     tableCapacityIsAtLeastOne,
@@ -206,7 +206,7 @@ module.exports = {
   update: [
     asyncErrorBoundary(tableExists),
     bodyHasRequiredProperties(requiredReservationProperties),
-    bodyOnlyHasRequiredProperties(requiredReservationProperties),
+    //bodyOnlyHasRequiredProperties(requiredReservationProperties),
     asyncErrorBoundary(reservationExists),
     tableSeatsReservation,
     tableIsUnoccupied,

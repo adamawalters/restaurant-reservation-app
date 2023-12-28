@@ -118,8 +118,8 @@ export async function createReservation(reservationForm, signal) {
  *  a promise that resolves to a table saved in the database with additional table_id, reservation_id, created_at, and updated_at fields.
  */
 export async function createTable(tableForm, signal) {
+  
   tableForm.capacity = Number(tableForm.capacity);
-  tableForm["reservation_id"] = null;
   const url = new URL(`${API_BASE_URL}/tables`);
 
   const options = {

@@ -12,7 +12,11 @@ function ReservationRow({ reservation }) {
       <td>{reservation.reservation_time}</td>
       <td>{reservation.people}</td>
       <td>
-        <Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>
+        {reservation.status === "booked" ? (
+          <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+            Seat
+          </Link>
+        ) : null}
       </td>
     </tr>
   );
