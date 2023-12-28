@@ -4,6 +4,7 @@ import TableRow from "./TableRow";
 
 function TableList() {
   const [tables, setTables] = useState([]);
+  const [updateTables, setUpdateTables] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -20,7 +21,7 @@ function TableList() {
     loadTables();
 
     return () => abortController.abort();
-  }, []);
+  }, [updateTables]);
 
   const tableHeader = (
     <tr>
@@ -28,11 +29,12 @@ function TableList() {
       <th>Table Name</th>
       <th>Table Capacity</th>
       <th>Status</th>
+      <th></th>
     </tr>
   );
 
   const tableRows = tables.map((table) => {
-    return <TableRow key={table.table_id} table={table} />;
+    return <TableRow key={table.table_id} table={table} setTables={setUpdateTables} />;
   });
 
   return (

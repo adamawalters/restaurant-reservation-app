@@ -28,6 +28,15 @@ function create(data){
             .then((response) => response[0])
 }
 
+function deleteReservation(table_id){
+    return knex("tables")
+            .where({table_id : table_id})
+            .update({
+                reservation_id : null
+            });
+
+}
+
 function update(reservation_id, table_id){
     return knex("tables")
             .update({
@@ -55,4 +64,5 @@ module.exports = {
     read,
     update,
     readReservation,
+    deleteReservation,
 }

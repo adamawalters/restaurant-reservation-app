@@ -34,9 +34,16 @@ async function update(req, res) {
   res.json({ data: response });
 }
 
+
+async function deleteReservation(req, res){
+  const {table} = res.locals;
+  await service.deleteReservation(table.table_id);
+  res.json({data : "updated"});  
+}
+
 /*Validation functions  */
 
-const requiredProperties = ["table_name", "capacity"];
+const requiredProperties = ["table_name", "capacity", "reservation_id"];
 const requiredReservationProperties = ["reservation_id"];
 
 function bodyHasRequiredProperties(propertiesList) {
@@ -119,6 +126,20 @@ async function reservationExists(req, res, next) {
   });
 }
 
+async function tableIsOccupied(req, res, next){
+  const { table } = res.locals;
+
+  if (!table.reservation_id) {
+    return next({
+      status: 400,
+      message: `Table ${table.table_id} is not occupied.`,
+    });
+  }
+
+  next();
+
+}
+
 function tableSeatsReservation(req, res, next) {
   const { table } = res.locals;
   const { reservation } = res.locals;
@@ -191,4 +212,5 @@ module.exports = {
     tableIsUnoccupied,
     asyncErrorBoundary(update),
   ],
+  delete: [asyncErrorBoundary(tableExists), asyncErrorBoundary(tableIsOccupied), asyncErrorBoundary(deleteReservation)],
 };

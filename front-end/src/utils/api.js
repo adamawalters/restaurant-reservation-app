@@ -119,6 +119,7 @@ export async function createReservation(reservationForm, signal) {
  */
 export async function createTable(tableForm, signal) {
   tableForm.capacity = Number(tableForm.capacity);
+  tableForm["reservation_id"] = null;
   const url = new URL(`${API_BASE_URL}/tables`);
 
   const options = {
@@ -187,4 +188,31 @@ export async function updateTable(table_id, reservation_id, signal) {
     []
   );
   return response;
+}
+
+/**
+ * Deletes reservation from  table in database.
+ * @param table_id
+ * The table_id to which the reservation will be assigned
+
+ * @param signal
+ * The AbortController signal
+ * @returns null
+ */
+export async function removeReservationFromTable(table_id, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const response = await fetchJson(
+    url,
+    {
+      headers,
+      method: "DELETE",
+      body: JSON.stringify({
+        data: {
+          table_id: table_id
+        },
+      }),
+      signal,
+    },
+    []
+  );
 }
