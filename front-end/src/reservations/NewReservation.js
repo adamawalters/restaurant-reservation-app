@@ -38,9 +38,9 @@ function NewReservation() {
     const [hour, minutes] = reservationForm.reservation_time.split(":").map((time) => Number(time));
 
     const reservationDate = new Date(year, month-1, day);
+    reservationDate.setHours(hour, minutes)
     const weekDay = reservationDate.getDay();
     const now = new Date();
-    now.setHours(0,0,0,0)
 
     let errorString = "";
 

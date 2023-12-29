@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   listAvailableTables,
   listReservation,
-  updateReservationStatus,
   updateTable,
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -30,8 +29,7 @@ function SeatReservation() {
         reservation_id,
         submissionAbortController.signal
       );
-
-      history.push("/");
+      history.push(`/`);
     } catch (error) {
       setTablesError(error);
     }
@@ -46,6 +44,9 @@ function SeatReservation() {
     );
     if (reservation.people > selectedTable.capacity) {
       errorString += `Table capacity must be greater than or equal to reservation size.`;
+    }
+    if(reservation.status === "seated") {
+      errorString += `Reservation ${reservation.reservation_id} is already seated.`
     }
     errorString
       ? setTablesError({ message: errorString })
@@ -106,7 +107,7 @@ function SeatReservation() {
       </div>
       <ErrorAlert error={tablesError} />
       {reservation ? <ReservationList reservations={[reservation]} /> : null}
-      <label htmlFor="table_id">Choose a Table</label>
+      <h4> Choose a table </h4>
       <form onSubmit={validateTable} onChange={handleChange}>
         <select name="table_id" value={selectedTableID} defaultValue="" required>
           <option value="">

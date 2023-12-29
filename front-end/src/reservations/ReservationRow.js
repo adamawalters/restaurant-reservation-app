@@ -1,21 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { updateReservationStatus } from "../utils/api";
 
 function ReservationRow({ reservation }) {
-  let abortController = new AbortController();
-
-  async function handleSeat(){
-    abortController.abort();
-    abortController = new AbortController();
-    try {
-      await updateReservationStatus(reservation.reservation_id, "seated", abortController.signal)
-    } catch (error) {
-      //Set dashboard error ?
-      console.log("Error!")
-    }
-  
-  }
 
   return (
     <tr>

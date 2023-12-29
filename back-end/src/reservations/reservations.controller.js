@@ -133,9 +133,9 @@ function reservationIsFutureAndRestaurantIsOpen(req, res, next) {
     .map((time) => Number(time));
 
   const reservationDate = new Date(year, month - 1, day);
+  reservationDate.setHours(hour, minutes)
   const weekDay = reservationDate.getDay();
   const now = new Date();
-  now.setHours(0, 0, 0, 0);
 
   let errorString = "";
 
@@ -214,22 +214,50 @@ async function reservationStatusIsValid(req, res, next) {
 
 }
 
+async function reservationStatusIsValidForCreation(req, res, next){
+  const {data : {status} = {}} = req.body;
+  if(status && status !== "booked") {
+    return next({
+      status: 400,
+      message: `${status} status invalid for creation of reservation.`
+    })
+  }
+  next();
+}
+
+async function statusIsFinished(req, res, next) {
+  const {reservation} = res.locals;
+  if(reservation.status === "finished") {
+    return next({
+      status: 400,
+      message: `Reservation is finished and cannot be updated`
+    })
+  }
+
+  next();
+
+}
+
+
+
 module.exports = {
   list: [urlHasDate, asyncErrorBoundary(list)],
   create: [
     bodyHasRequiredProperties(requiredProperties),
-    bodyOnlyHasRequiredProperties(requiredProperties),
+    //bodyOnlyHasRequiredProperties(requiredProperties),
     peoplePropertyIsPositive,
     reservationDateIsValid,
     reservationTimeIsValid,
     reservationIsFutureAndRestaurantIsOpen,
+    reservationStatusIsValidForCreation,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   updateStatus: [
     asyncErrorBoundary(reservationExists),
     bodyHasRequiredProperties(requiredReservationStatusProperties),
-    asyncErrorBoundary(reservationStatusIsValid),
-    updateStatus,
+    statusIsFinished,
+    reservationStatusIsValid,
+    asyncErrorBoundary(updateStatus),
   ],
 };

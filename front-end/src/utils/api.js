@@ -199,7 +199,7 @@ export async function updateTable(table_id, reservation_id, signal) {
  * The AbortController signal
  * @returns null
  */
-export async function removeReservationFromTable(tableID, signal){
+export async function removeReservationFromTable(tableID, reservationID, signal){
   const url = new URL(`${API_BASE_URL}/tables/${tableID}/seat`);
   await fetchJson(
     url,
@@ -208,7 +208,7 @@ export async function removeReservationFromTable(tableID, signal){
       method: "DELETE",
       body: JSON.stringify({
         data: {
-          table_id: tableID
+          reservation_id : reservationID
         },
       }),
       signal,
@@ -223,12 +223,14 @@ export async function removeReservationFromTable(tableID, signal){
  * The reservation that will be updated
  * 
  * @param newStatus
- * A string for the new status of the reservation (either "booked", "seated", or "finished")
+ * A string for the new status of the reservation (either "booked", "seated",)
 
  * @param signal
  * The AbortController signal
  * @returns null
  */
+
+/*
 export async function updateReservationStatus(reservationID, newStatus, signal ) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservationID}/status`);
   const response = await fetchJson(
@@ -247,3 +249,5 @@ export async function updateReservationStatus(reservationID, newStatus, signal )
   );
   return response;
 }
+*/
+

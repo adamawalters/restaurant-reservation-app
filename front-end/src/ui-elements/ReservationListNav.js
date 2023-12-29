@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import Dashboard from "../dashboard/Dashboard";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import React from "react";
 import { previous, next, today } from "../utils/date-time";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 

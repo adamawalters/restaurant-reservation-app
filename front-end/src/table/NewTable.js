@@ -28,7 +28,7 @@ function NewTable() {
     abortController = new AbortController();
 
     try {
-      const response = await createTable(tableForm, abortController.signal);
+      await createTable(tableForm, abortController.signal);
       history.push("/");
     } catch (error) {
         setNewTableError(error);

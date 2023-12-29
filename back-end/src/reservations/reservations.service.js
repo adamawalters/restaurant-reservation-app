@@ -5,6 +5,7 @@ function list(date){
     return knex("reservations")
         .select("*")
         .where({reservation_date : date})
+        .andWhereNot({status : "finished"})
         .orderBy("reservation_time")
 
 }
@@ -28,6 +29,7 @@ function updateStatus(reservation_id, newStatus) {
                 .where({reservation_id : reservation_id})
                 .update("status", newStatus)
                 .returning("*")
+                .then((response) => response[0])
 }
 
 
