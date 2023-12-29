@@ -4,21 +4,17 @@
 
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const { update } = require("../db/connection");
 
 async function list(req, res) {
-  //const { date } = res.locals;
   const { date, mobile_number } = req.query;
 
-  if(mobile_number) {
-    res.json({data: await service.search(mobile_number)})
+  if (mobile_number) {
+    res.json({ data: await service.search(mobile_number) });
   } else {
     res.json({
       data: await service.list(date),
     });
   }
-
-
 }
 
 async function read(req, res) {
@@ -46,21 +42,23 @@ async function updateStatus(req, res) {
   });
 }
 
-/*Validation functions  */
+async function update(req, res) {
+  const {reservation : reservationFromDatabase} = res.locals;
+  const {data : reservationFromBody} = res.locals;
 
-function urlHasDate(req, res, next) {
-  const { date } = req.query;
-
-  if (date) {
-    res.locals.date = date;
-    return next();
+  const newReservation = {
+    ...reservationFromBody,
+    reservation_id : reservationFromDatabase.reservation_id
   }
 
-  return next({
-    status: 400,
-    message: `URL must contain a date in the query parameters to list reservations.`,
-  });
+  res.json({
+    data : await service.update(reservationFromDatabase.reservation_id, newReservation)
+  })
+
+
 }
+
+/*Validation functions  */
 
 const requiredProperties = [
   "first_name",
@@ -205,11 +203,11 @@ async function reservationExists(req, res, next) {
 
   next({
     status: 404,
-    message: `Reservation ${reservation_id} does not exist.`,
+    message: `Reservation "${reservation_id}" does not exist.`,
   });
 }
 
-const validReservationStatuses = ["booked", "seated", "finished"];
+const validReservationStatuses = ["booked", "seated", "finished", "cancelled"];
 const requiredReservationStatusProperties = ["status"];
 
 async function reservationStatusIsValid(req, res, next) {
@@ -226,12 +224,12 @@ async function reservationStatusIsValid(req, res, next) {
   next();
 }
 
-async function reservationStatusIsValidForCreation(req, res, next) {
+async function reservationStatusIsValidForCreationEditing(req, res, next) {
   const { data: { status } = {} } = req.body;
   if (status && status !== "booked") {
     return next({
       status: 400,
-      message: `${status} status invalid for creation of reservation.`,
+      message: `"${status}" status invalid for creation/editing of reservation.`,
     });
   }
   next();
@@ -242,12 +240,26 @@ async function statusIsFinished(req, res, next) {
   if (reservation.status === "finished") {
     return next({
       status: 400,
-      message: `Reservation is finished and cannot be updated`,
+      message: `Reservation is finished and cannot be updated.`,
     });
   }
 
   next();
 }
+
+async function statusIsNotBooked(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation.status !== "booked") {
+    return next({
+      status: 400,
+      message: `Reservation status must be "booked" to edit it. Status is currently "${reservation.status}". `,
+    });
+  }
+
+  next();
+}
+
+
 
 module.exports = {
   list: [/*urlHasDate,*/ asyncErrorBoundary(list)],
@@ -258,7 +270,7 @@ module.exports = {
     reservationDateIsValid,
     reservationTimeIsValid,
     reservationIsFutureAndRestaurantIsOpen,
-    reservationStatusIsValidForCreation,
+    reservationStatusIsValidForCreationEditing,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
@@ -268,5 +280,16 @@ module.exports = {
     statusIsFinished,
     reservationStatusIsValid,
     asyncErrorBoundary(updateStatus),
+  ],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    bodyHasRequiredProperties(requiredProperties),
+    peoplePropertyIsPositive,
+    reservationDateIsValid,
+    reservationTimeIsValid,
+    reservationIsFutureAndRestaurantIsOpen,
+    reservationStatusIsValidForCreationEditing,
+    statusIsNotBooked,
+    update,
   ],
 };

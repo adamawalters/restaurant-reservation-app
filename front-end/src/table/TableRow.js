@@ -3,7 +3,7 @@ import { removeReservationFromTable } from "../utils/api";
 
 function TableRow({ table, setTables, setUpdateReservations }) {
 
-
+  //try/catch??
   async function handleFinish(e){
     const abortController = new AbortController();
     const canFinish = window.confirm(`Is this table ready to seat new guests? This cannot be undone.`);

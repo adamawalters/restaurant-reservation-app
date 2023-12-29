@@ -75,6 +75,8 @@ function SeatReservation() {
     return () => abortController.abort();
   }, [reservation_id]);
 
+  
+
   /* Load available tables from DB */
   useEffect(() => {
     const abortController = new AbortController();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReservationList from "./ReservationList";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations } from "../utils/api";
@@ -9,6 +9,7 @@ export default function SearchReservation() {
   const [error, setError] = useState(null);
   const [notFound, setNotFound] = useState(false);
   let abortController = new AbortController();
+  const [updateReservations, setUpdateReservations] = useState(false);
 
   function handleChange(e){
     setMobileNumber(e.target.value);
@@ -32,6 +33,12 @@ export default function SearchReservation() {
     }
   }
 
+  useEffect(()=>{
+    if(mobileNumber) {
+      handleSumbit();
+    }
+  }, [updateReservations])
+
 
 
   return (
@@ -49,7 +56,7 @@ export default function SearchReservation() {
       onChange={handleChange}
     />
     <button type="submit" onClick={handleSumbit}>Find</button>
-    {reservations ? <ReservationList reservations={reservations} /> : null}
+    {reservations ? <ReservationList reservations={reservations} setUpdateReservations={setUpdateReservations}/> : null}
     {notFound ? <h4>No reservations found</h4> : null}
     </main>
   );

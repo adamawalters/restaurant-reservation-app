@@ -1,7 +1,7 @@
 import React from "react";
 import ReservationRow from "./ReservationRow";
 
-function ReservationList({ reservations }) {
+function ReservationList({ reservations, setUpdateReservations }) {
   const tableHeader = (
     <tr>
       <th>ID</th>
@@ -13,6 +13,8 @@ function ReservationList({ reservations }) {
       <th>People</th>
       <th>Reservation Status</th>
       <th></th>
+      <th></th>
+      <th></th>
     </tr>
   );
 
@@ -22,6 +24,7 @@ function ReservationList({ reservations }) {
         <ReservationRow
           key={reservation.reservation_id}
           reservation={reservation}
+          setUpdateReservations={setUpdateReservations}
         />
       );
     });

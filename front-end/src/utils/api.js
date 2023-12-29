@@ -111,6 +111,34 @@ export async function createReservation(reservationForm, signal) {
 }
 
 /**
+ * Edits a reservation.
+ * @param reservationForm
+ * The data to use to create the reservation
+ * @param signal
+ * The AbortController signal
+ * @returns {Promise<{reservation}>}
+ *  a promise that resolves to a reservation saved in the database with additional reservation_id, created_at, and updated_at fields.
+ */
+export async function editReservation(reservationForm, signal) {
+  reservationForm.people = Number(reservationForm.people);
+
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationForm.reservation_id}`);
+
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: reservationForm }),
+    signal,
+  };
+  let response = await fetchJson(url, options, {});
+  response = formatReservationDate(response);
+  response = formatReservationTime(response);
+
+  return response;
+}
+
+
+/**
  * Creates a table.
  * @param tableForm
  * The data to use to create the table (an object with table_name and capacity fields)
@@ -217,6 +245,25 @@ export async function removeReservationFromTable(tableID, reservationID, signal)
     },
     []
   );
+}
+
+export async function updateReservationStatus(reservationID, newStatus, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationID}/status/`);
+  const response = await fetchJson(
+    url,
+    {
+      headers,
+      method: "PUT",
+      body: JSON.stringify({
+        data: {
+          status : newStatus
+        },
+      }),
+      signal,
+    },
+    []
+  );
+  return response;
 }
 
 

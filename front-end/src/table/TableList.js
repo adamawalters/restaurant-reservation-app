@@ -14,7 +14,7 @@ function TableList({setUpdateReservations}) {
         const response = await listTables(abortController.signal);
         setTables(response);
       } catch (error) {
-        console.log(`Table Error!`);
+        //console.log(`Table Error!`);
       }
     }
 

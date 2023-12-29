@@ -86,7 +86,7 @@ function tableCapacityIsANumber(req, res, next) {
   if(typeof capacity !== "number" || isNaN(capacity)){
     return next({
       status: 400,
-      message: `capacity must be a number`
+      message: `capacity must be a number.`
     })
   }
 
@@ -105,7 +105,7 @@ async function tableExists(req, res, next) {
 
   next({
     status: 404,
-    message: `table_id ${table_id} not found`,
+    message: `table_id ${table_id} not found.`,
   });
 }
 
