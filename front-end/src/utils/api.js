@@ -54,6 +54,8 @@ async function fetchJson(url, options, onCancel) {
 
 /**
  * Retrieves all existing reservation.
+ * @param params
+ * The search query (date)
  * @returns {Promise<[reservation]>}
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
@@ -217,37 +219,4 @@ export async function removeReservationFromTable(tableID, reservationID, signal)
   );
 }
 
-/**
- * Updates reservation status.
- * @param reservationID
- * The reservation that will be updated
- * 
- * @param newStatus
- * A string for the new status of the reservation (either "booked", "seated",)
-
- * @param signal
- * The AbortController signal
- * @returns null
- */
-
-/*
-export async function updateReservationStatus(reservationID, newStatus, signal ) {
-  const url = new URL(`${API_BASE_URL}/reservations/${reservationID}/status`);
-  const response = await fetchJson(
-    url,
-    {
-      headers,
-      method: "PUT",
-      body: JSON.stringify({
-        data: {
-          status: newStatus
-        },
-      }),
-      signal,
-    },
-    []
-  );
-  return response;
-}
-*/
 

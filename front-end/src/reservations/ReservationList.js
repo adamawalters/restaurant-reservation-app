@@ -17,7 +17,6 @@ function ReservationList({ reservations }) {
   );
 
   const reservationRows = reservations
-    .filter((reservation) => reservation.status !== "finished")
     .map((reservation) => {
       return (
         <ReservationRow
