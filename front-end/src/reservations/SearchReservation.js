@@ -52,6 +52,7 @@ export default function SearchReservation() {
           placeholder="Enter a customer's phone number"
           value={mobileNumber}
           onChange={handleChange}
+          onKeyDown={(e)=> {if(e.key === "Enter") handleSumbit()}}
         />
         <div className="input-group-append">
           <button className="btn btn-primary" type="submit" onClick={handleSumbit}>
