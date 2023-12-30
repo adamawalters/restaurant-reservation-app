@@ -24,23 +24,23 @@ function ReservationRow({ reservation, setUpdateReservations, setError }) {
 
   return (
     <tr>
-      <td>{reservation.reservation_id}</td>
-      <td>{reservation.first_name}</td>
-      <td>{reservation.last_name}</td>
-      <td>{reservation.mobile_number}</td>
-      <td>{reservation.reservation_date}</td>
-      <td>{reservation.reservation_time}</td>
-      <td>{reservation.people}</td>
-      <td><span data-reservation-id-status={reservation.reservation_id}>{reservation.status}</span></td>
-      <td>
+      <td className="align-middle">{reservation.reservation_id}</td>
+      <td className="align-middle">{reservation.first_name}</td>
+      <td className="align-middle">{reservation.last_name}</td>
+      <td className="align-middle">{reservation.mobile_number}</td>
+      <td className="align-middle">{reservation.reservation_date}</td>
+      <td className="align-middle">{reservation.reservation_time}</td>
+      <td className="align-middle">{reservation.people}</td>
+      <td className="align-middle"><span data-reservation-id-status={reservation.reservation_id}>{reservation.status}</span></td>
+      <td className="align-middle">
         {reservation.status === "booked" ? (
           <Link className="btn btn-primary" to={`/reservations/${reservation.reservation_id}/seat`}>
             Seat
           </Link>
         ) : null}
       </td>
-      <td><button className="btn btn-info"><Link className="text-reset" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></button></td>
-      <td><button className="btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</button></td>
+      <td><button className="align-middle btn btn-info"><Link className="text-reset" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></button></td>
+      <td><button className="align-middle btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</button></td>
     </tr>
   );
 }

@@ -25,16 +25,16 @@ function TableRow({ table, setTables, setUpdateReservations, setError }) {
 
   return (
     <tr>
-      <td>{table.table_id}</td>
-      <td>{table.table_name}</td>
-      <td>{table.capacity}</td>
-      <td data-table-id-status={table.table_id}>
+      <td className="align-middle" >{table.table_id}</td>
+      <td className="align-middle">{table.table_name}</td>
+      <td className="align-middle">{table.capacity}</td>
+      <td className="align-middle" data-table-id-status={table.table_id}>
         {table.reservation_id ? "Occupied" : "Free"}
       </td>
-      <td>
+      <td className="align-middle">
         {table.reservation_id}
       </td>
-      <td className="text-center">
+      <td className="text-center align-middle">
        {table.reservation_id ? finishButton : null}
       </td> 
     </tr>
