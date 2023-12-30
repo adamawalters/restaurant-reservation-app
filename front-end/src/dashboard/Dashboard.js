@@ -4,9 +4,6 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "../reservations/ReservationList";
 import ReservationListNav from "../ui-elements/ReservationListNav";
 import useQuery from "../utils/useQuery";
-import {
-  useHistory,
-} from "react-router-dom/cjs/react-router-dom.min";
 import { today } from "../utils/date-time";
 import TableList from "../table/TableList";
 
@@ -21,14 +18,8 @@ function Dashboard() {
   const [reservationsError, setReservationsError] = useState(null);
   const [updateReservations, setUpdateReservations] = useState(false);
   const queryParams = useQuery();
-  const history = useHistory();
-
-  if (!queryParams.has("date")) {
-    history.replace(`/dashboard?date=${today()}`);
-    queryParams.set("date", today())
-  }
-
-  const [date, setDate] = useState(queryParams.get("date"));
+  const initialDate = queryParams.get("date") || today();
+  const [date, setDate] = useState(initialDate);
 
   useEffect(() => {
     setReservations(null);
@@ -79,7 +70,7 @@ function Dashboard() {
      <ErrorAlert error={reservationsError} /> 
       <ReservationListNav date={date} setDate={setDate} />
       <div className="d-flex justify-content-center">
-        <h2 className="font-italic">Reservations loading </h2>
+        <h2 className="font-italic">Reservations loading</h2>
       </div>
     </main>
   );

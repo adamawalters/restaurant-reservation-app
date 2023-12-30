@@ -104,22 +104,26 @@ function SeatReservation() {
     <main>
       <h1>Seat Reservation</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">{`Assign a table to this reservation (reservation ${reservation_id}).`}</h4>
+        <h4 className="mb-0">{`Assign a table to reservation ${reservation_id}.`}</h4>
       </div>
       <ErrorAlert error={tablesError} />
       {reservation ? <ReservationList reservations={[reservation]} /> : null}
       <h4> Choose a table </h4>
       <form onSubmit={validateTable} onChange={handleChange}>
-        <select name="table_id" value={selectedTableID} defaultValue="" required>
-          <option value="">
-            None
-          </option>
-          {options}
-        </select>
-        <button type="submit">Submit</button>
-        <button type="button" onClick={() => history.goBack()}>
-          Cancel
-        </button>
+        <div className="form-group">
+          <select className="form-control" name="table_id" value={selectedTableID} defaultValue="" required>
+            <option value="">
+              None
+            </option>
+            {options}
+          </select>
+        </div>
+        <div className="d-flex justify-content-between">
+          <button className="btn btn-primary" type="submit">Submit</button>
+          <button className="btn btn-danger" type="button" onClick={() => history.goBack()}>
+            Cancel
+          </button>
+        </div>
       </form>
     </main>
   );

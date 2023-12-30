@@ -31,8 +31,8 @@ function ReservationList({ reservations, setUpdateReservations , setError}) {
     });
 
   return (
-    <div className="overflow-scroll" style={{ maxHeight: "300px" }}>
-      <table className="table table-striped table-hover table-sm">
+    <div className="overflow-auto" style={{ maxHeight: "100%"}}>
+      <table className="table table-striped table-hover table-sm" style={{tableLayout : "fixed"}}>
         <caption>List of reservations</caption>
         <thead>{tableHeader}</thead>
         <tbody>{reservationRows}</tbody>

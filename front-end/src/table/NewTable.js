@@ -40,7 +40,7 @@ function NewTable() {
     <main>
       <h1>New Table</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Seat a table</h4>
+        <h4 className="mb-0">Create a table where reservations can be seated</h4>
       </div>
       <ErrorAlert error={newTableError} />
       <TableForm

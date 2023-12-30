@@ -93,7 +93,7 @@ function ReservationForm({
           required
         />
       </div>
-      <div className="d-md-flex justify-content-between">
+      <div className="d-flex justify-content-between">
         <SubmitButton />
         <CancelButton history={history} />
       </div>

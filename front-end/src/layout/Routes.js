@@ -11,7 +11,6 @@ import EditReservation from "../reservations/EditReservation";
 
 /**
  * Defines all the routes for the application.
- * You will need to make changes
  *
  * @returns {JSX.Element}
  */

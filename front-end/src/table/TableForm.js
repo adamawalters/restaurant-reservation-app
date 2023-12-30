@@ -17,6 +17,7 @@ function TableForm({tableForm, history, handleChange, submitHandler}){
               onChange={handleChange}
               minLength="2"
               required
+              placeholder="Enter a table name"
             />
           </div>
           <div className="form-group">
@@ -28,11 +29,12 @@ function TableForm({tableForm, history, handleChange, submitHandler}){
               name="capacity"
               value={tableForm.capacity}
               onChange={handleChange}
+              placeholder="Enter a capacity (minimum 1)"
               min="1"
               required
             />
           </div>
-          <div className="d-md-flex justify-content-between">
+          <div className="d-flex justify-content-between">
             <SubmitButton />
             <CancelButton history={history} />
           </div>

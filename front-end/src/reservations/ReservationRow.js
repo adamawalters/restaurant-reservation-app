@@ -39,8 +39,8 @@ function ReservationRow({ reservation, setUpdateReservations, setError }) {
           </Link>
         ) : null}
       </td>
-      <td><button className="align-middle btn btn-info"><Link className="text-reset" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></button></td>
-      <td><button className="align-middle btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</button></td>
+      <td className="align-middle"><Link className="btn btn-info" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></td>
+      <td className="align-middle"><Link to="" className=" btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</Link></td>
     </tr>
   );
 }
