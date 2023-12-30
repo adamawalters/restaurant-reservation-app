@@ -8,56 +8,65 @@ export default function SearchReservation() {
   const [reservations, setReservations] = useState(null);
   const [error, setError] = useState(null);
   const [notFound, setNotFound] = useState(false);
-  let abortController = new AbortController();
-  const [updateReservations, setUpdateReservations] = useState(false);
 
-  function handleChange(e){
+  function handleChange(e) {
     setMobileNumber(e.target.value);
   }
 
-  async function handleSumbit(){
+  async function handleSumbit() {
     setNotFound(false);
     setReservations(null);
-    abortController.abort();
-    abortController = new AbortController();
+    const abortController = new AbortController();
 
     try {
-        const response = await listReservations({mobile_number : mobileNumber}, abortController.signal);
-        if(response.length) {
-            setReservations(response);
-        } else {
-            setNotFound(true);
-        }
+      const response = await listReservations(
+        { mobile_number: mobileNumber },
+        abortController.signal
+      );
+      if (response.length) {
+        setReservations(response);
+      } else {
+        setNotFound(true);
+      }
     } catch (error) {
-        setError(error);
+      setError(error);
     }
+
+    return ()=> abortController.abort();
   }
-
-  useEffect(()=>{
-    if(mobileNumber) {
-      handleSumbit();
-    }
-  }, [updateReservations])
-
-
 
   return (
     <main>
       <h1>Search for Reservation</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Search for reservations by customer phone number</h4>
+        <h4 className="mb-0">
+          Search for reservations by customer phone number
+        </h4>
       </div>
       <ErrorAlert error={error} />
-      <input
-      name="mobile_number"
-      type="tel"
-      placeholder="Enter a customer's phone number"
-      value={mobileNumber}
-      onChange={handleChange}
-    />
-    <button type="submit" onClick={handleSumbit}>Find</button>
-    {reservations ? <ReservationList reservations={reservations} setUpdateReservations={setUpdateReservations}/> : null}
-    {notFound ? <h4>No reservations found</h4> : null}
+      <div className="input-group">
+        <input
+          className="form-control"
+          name="mobile_number"
+          type="tel"
+          placeholder="Enter a customer's phone number"
+          value={mobileNumber}
+          onChange={handleChange}
+        />
+        <div className="input-group-append">
+          <button className="btn btn-primary" type="submit" onClick={handleSumbit}>
+            Find
+          </button>
+        </div>
+      </div>
+      {reservations ? (
+        <ReservationList
+          reservations={reservations}
+          setUpdateReservations={handleSumbit}
+          setError={setError}
+        />
+      ) : null}
+      {notFound ? <h4>No reservations found</h4> : null}
     </main>
   );
 }

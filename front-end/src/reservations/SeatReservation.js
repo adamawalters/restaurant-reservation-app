@@ -18,21 +18,20 @@ function SeatReservation() {
   const [reservation, setReservation] = useState(null);
   const { reservation_id } = useParams();
   const history = useHistory();
-  let submissionAbortController = new AbortController();
 
   async function addReservationToTable() {
-    submissionAbortController.abort();
-    submissionAbortController = new AbortController();
+    const abortController = new AbortController();
     try {
       await updateTable(
         Number(selectedTableID),
         reservation_id,
-        submissionAbortController.signal
+        abortController.signal
       );
       history.push(`/`);
     } catch (error) {
       setTablesError(error);
     }
+    return ()=> abortController.abort();
   }
 
   function validateTable(e) {

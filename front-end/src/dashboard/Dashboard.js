@@ -61,11 +61,11 @@ function Dashboard() {
           <h4 className="mb-0">Reservations for {date}</h4>
         </div>
         <ReservationListNav date={date} setDate={setDate} />
-        <ReservationList reservations={reservations} setUpdateReservations={setUpdateReservations} />
+        <ReservationList setError={setReservationsError} reservations={reservations} setUpdateReservations={setUpdateReservations} />
         <div className="d-md-flex mb-3 justify-content-center">
           <h4 className="mb-0">Restaurant Table Status</h4>
         </div>
-        <TableList setUpdateReservations={setUpdateReservations}/>
+        <TableList setUpdateReservations={setUpdateReservations} setError={setReservationsError}/>
       </main>
     );
   }

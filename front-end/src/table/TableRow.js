@@ -1,22 +1,26 @@
 import React from "react";
 import { removeReservationFromTable } from "../utils/api";
 
-function TableRow({ table, setTables, setUpdateReservations }) {
+function TableRow({ table, setTables, setUpdateReservations, setError }) {
 
-  //try/catch??
   async function handleFinish(e){
     const abortController = new AbortController();
     const canFinish = window.confirm(`Is this table ready to seat new guests? This cannot be undone.`);
     if(canFinish) {
-      await removeReservationFromTable(table.table_id, abortController.signal);
-      setTables((current) => !current)
-      setUpdateReservations((current) => !current)
+      try {
+        await removeReservationFromTable(table.table_id, abortController.signal);
+        setTables((current) => !current)
+        setUpdateReservations((current) => !current)
+      } catch (error) {
+        setError(error)
+      }
+      
     }
     return ()=>abortController.abort();
   }
 
   const finishButton = (
-    <button onClick={handleFinish} data-table-id-finish={table.table_id}>Finish</button>
+    <button className="btn btn-primary" onClick={handleFinish} data-table-id-finish={table.table_id}>Finish</button>
   )
 
   return (
@@ -28,8 +32,11 @@ function TableRow({ table, setTables, setUpdateReservations }) {
         {table.reservation_id ? "Occupied" : "Free"}
       </td>
       <td>
-       {table.reservation_id ? finishButton : null}
+        {table.reservation_id}
       </td>
+      <td className="text-center">
+       {table.reservation_id ? finishButton : null}
+      </td> 
     </tr>
   );
 }

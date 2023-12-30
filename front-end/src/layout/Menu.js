@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 
 import { Link, useLocation } from "react-router-dom";
 
@@ -13,12 +13,11 @@ function Menu() {
   const search = useRef(null);
   const newReservation = useRef(null);
   const newTable = useRef(null);
-  const [currentMenu, setCurrentMenu] = useState(dashboard);
   const {pathname} = useLocation();
 
-  let refs = [dashboard, search, newReservation, newTable]
 
   useEffect(()=>{
+    const refs = [dashboard, search, newReservation, newTable]
     refs.forEach((ref) => ref.current.className = `nav-link text-white`)
 
     if(pathname.startsWith("/dashboard")) {
@@ -58,7 +57,7 @@ function Menu() {
               ref={dashboard}
             >
               <span className="oi oi-dashboard mr-1" />
-              <span class="d-none d-md-inline">&nbsp;Dashboard</span>
+              <span className="d-none d-md-inline">&nbsp;Dashboard</span>
             </Link>
           </li>
           <li className="nav-item mx-1 mx-md-0 my-1 my-md-0">
@@ -78,7 +77,7 @@ function Menu() {
               ref={newReservation}
             >
               <span className="oi oi-plus mr-1" />
-              <span class="d-none d-md-inline">&nbsp;New Reservation</span>
+              <span className="d-none d-md-inline">&nbsp;New Reservation</span>
             </Link>
           </li>
           <li className="nav-item mx-1 mx-md-0 my-1 my-md-0">
@@ -88,7 +87,7 @@ function Menu() {
               ref={newTable}
             >
               <span className="oi oi-layers mr-1" />
-              <span class="d-none d-md-inline">&nbsp;New Table</span>
+              <span className="d-none d-md-inline">&nbsp;New Table</span>
             </Link>
           </li>
         </ul>

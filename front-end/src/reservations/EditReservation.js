@@ -12,7 +12,6 @@ export default function EditReservation() {
   const [error, setError] = useState(null);
   const history = useHistory();
   const [reservationForm, setReservationForm] = useState(null);
-  let resAbortController = new AbortController();
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -82,17 +81,18 @@ export default function EditReservation() {
   }
 
   async function submitEditedReservation() {
-    resAbortController.abort();
-    resAbortController = new AbortController();
+    const abortController = new AbortController();
     try {
       const response = await editReservation(
         reservationForm,
-        resAbortController.signal
+        abortController.signal
       );
       history.push(`/dashboard?date=${response.reservation_date}`);
     } catch (error) {
       setError(error);
     }
+
+    return ()=> abortController.abort();
   }
 
   if(reservationForm) return (

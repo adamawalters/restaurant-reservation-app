@@ -2,23 +2,24 @@ import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { updateReservationStatus } from "../utils/api";
 
-function ReservationRow({ reservation, setUpdateReservations }) {
+function ReservationRow({ reservation, setUpdateReservations, setError }) {
 
-  let abortController = new AbortController();
+
 
   async function cancelReservation(){
-    abortController.abort();
-    abortController = new AbortController();
+
+    const abortController = new AbortController();
     const canCancel = window.confirm("Do you want to cancel this reservation? This cannot be undone.")
     if(canCancel) {
       try {
         await updateReservationStatus(reservation.reservation_id, "cancelled", abortController.signal);
         setUpdateReservations((current) => !current);
       } catch (error) {
-        //error handling?
-        console.log(`Error: ${JSON.stringify(error)}`)
+        setError(error);
       }
     } 
+
+    return ()=> abortController.abort();
   }
 
   return (
@@ -33,13 +34,13 @@ function ReservationRow({ reservation, setUpdateReservations }) {
       <td><span data-reservation-id-status={reservation.reservation_id}>{reservation.status}</span></td>
       <td>
         {reservation.status === "booked" ? (
-          <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+          <Link className="btn btn-primary" to={`/reservations/${reservation.reservation_id}/seat`}>
             Seat
           </Link>
         ) : null}
       </td>
-      <td><button><Link to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></button></td>
-      <td><button data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</button></td>
+      <td><button className="btn btn-info"><Link className="text-reset" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></button></td>
+      <td><button className="btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</button></td>
     </tr>
   );
 }

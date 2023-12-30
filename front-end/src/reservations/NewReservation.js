@@ -8,7 +8,6 @@ import ReservationForm from "./ReservationForm";
 function NewReservation() {
   const [newReservationError, setNewReservationError] = useState(null);
   const history = useHistory();
-  let resAbortController = new AbortController();
 
   const defaultReservationForm = {
     first_name: "",
@@ -67,18 +66,20 @@ function NewReservation() {
 
 
   async function submitNewReservation() {
-    resAbortController.abort();
-    resAbortController = new AbortController();
+
+   const abortController = new AbortController();
     try {
       const response = await createReservation(
         reservationForm,
-        resAbortController.signal
+        abortController.signal
       );
       setReservationForm({ ...defaultReservationForm });
       history.push(`/dashboard?date=${response.reservation_date}`);
     } catch (error) {
       setNewReservationError(error);
     }
+
+    return ()=>abortController.abort();
   }
 
   return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listTables } from "../utils/api";
 import TableRow from "./TableRow";
 
-function TableList({setUpdateReservations}) {
+function TableList({setUpdateReservations, setError}) {
   const [tables, setTables] = useState([]);
   const [updateTables, setUpdateTables] = useState(false);
 
@@ -25,16 +25,17 @@ function TableList({setUpdateReservations}) {
 
   const tableHeader = (
     <tr>
-      <th>Table ID</th>
+      <th>ID</th>
       <th>Table Name</th>
       <th>Table Capacity</th>
       <th>Status</th>
+      <th>Reservation ID</th>
       <th></th>
     </tr>
   );
 
   const tableRows = tables.map((table) => {
-    return <TableRow key={table.table_id} table={table} setTables={setUpdateTables} setUpdateReservations={setUpdateReservations} />;
+    return <TableRow setError={setError} key={table.table_id} table={table} setTables={setUpdateTables} setUpdateReservations={setUpdateReservations} />;
   });
 
   return (
