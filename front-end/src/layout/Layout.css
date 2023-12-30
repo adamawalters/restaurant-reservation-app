@@ -1,5 +1,8 @@
 .side-bar {
-  /*background-color: #393a44;*/
   background-color: #212529;
   min-width: 200px;
+}
+
+body, html, #root{
+  height: 100vh;
 }

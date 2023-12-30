@@ -1,6 +1,6 @@
-import React, {useRef, useState, useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 /**
  * Defines the menu for this application.
@@ -9,25 +9,37 @@ import { Link } from "react-router-dom";
  */
 
 function Menu() {
-
-
- /*  const dashboard = useRef(null);
+  const dashboard = useRef(null);
   const search = useRef(null);
   const newReservation = useRef(null);
   const newTable = useRef(null);
   const [currentMenu, setCurrentMenu] = useState(dashboard);
+  const {pathname} = useLocation();
+
+  let refs = [dashboard, search, newReservation, newTable]
 
   useEffect(()=>{
-    currentMenu.current.className = "nav-link active"
-    return () => currentMenu.current.className = "nav-link"
-  }, [currentMenu]) */
+    refs.forEach((ref) => ref.current.className = `nav-link text-white`)
+
+    if(pathname.startsWith("/dashboard")) {
+      dashboard.current.className = `nav-link active`
+    } else if (pathname.startsWith("/search")){
+      search.current.className = `nav-link active`
+    } else if (pathname.startsWith("/reservations/new")){
+      newReservation.current.className = `nav-link active`
+    } else if (pathname.startsWith("/tables/new")) {
+      newTable.current.className = `nav-link active`
+    }
+  }, [pathname]) 
+
+
 
 
   return (
     <nav className="navbar navbar-dark align-items-start p-0">
       <div className="container-fluid flex-column p-0">
         <Link
-          className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+          className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0 mb-md-3"
           to="/"
         >
           <div className="sidebar-brand-text mx-3">
@@ -35,29 +47,48 @@ function Menu() {
           </div>
         </Link>
         <hr className="sidebar-divider my-0" />
-        <ul className="nav navbar-nav text-light d-flex flex-row d-md-block" id="accordionSidebar">
-          <li className="nav-item mx-1 mx-md-0">
-            <Link className="nav-link" to="/dashboard" onClick={()=>setCurrentMenu(dashboard)} ref={dashboard}>
-              <span className="oi oi-dashboard" />
-              &nbsp;Dashboard
+        <ul
+          className="nav nav-pills text-light d-flex flex-row d-md-block"
+          id="accordionSidebar"
+        >
+          <li className="nav-item mx-1 mx-md-0 my-1 my-md-0 my-1 my-md-0">
+            <Link
+              className="nav-link text-white"
+              to="/dashboard"
+              ref={dashboard}
+            >
+              <span className="oi oi-dashboard mr-1" />
+              <span class="d-none d-md-inline">&nbsp;Dashboard</span>
             </Link>
           </li>
-          <li className="nav-item mx-1 mx-md-0">
-            <Link className="nav-link" to="/search" onClick={()=>setCurrentMenu(search)} ref={search}>
-              <span className="oi oi-magnifying-glass" />
-              &nbsp;Search
+          <li className="nav-item mx-1 mx-md-0 my-1 my-md-0">
+            <Link
+              className="nav-link text-white"
+              to="/search"
+              ref={search}
+            >
+              <span className="oi oi-magnifying-glass mr-1" />
+              <span className="d-none d-md-inline">&nbsp;Search</span>
             </Link>
           </li>
-          <li className="nav-item mx-1 mx-md-0">
-            <Link className="nav-link" to="/reservations/new" onClick={()=>setCurrentMenu(newReservation)} ref={newReservation}>
-              <span className="oi oi-plus" />
-              &nbsp;New Reservation
+          <li className="nav-item mx-1 mx-md-0 my-1 my-md-0">
+            <Link
+              className="nav-link text-white"
+              to="/reservations/new"
+              ref={newReservation}
+            >
+              <span className="oi oi-plus mr-1" />
+              <span class="d-none d-md-inline">&nbsp;New Reservation</span>
             </Link>
           </li>
-          <li className="nav-item mx-1 mx-md-0">
-            <Link className="nav-link" to="/tables/new" onClick={()=>setCurrentMenu(newTable)} ref={newTable}>
-              <span className="oi oi-layers" />
-              &nbsp;New Table
+          <li className="nav-item mx-1 mx-md-0 my-1 my-md-0">
+            <Link
+              className="nav-link"
+              to="/tables/new"
+              ref={newTable}
+            >
+              <span className="oi oi-layers mr-1" />
+              <span class="d-none d-md-inline">&nbsp;New Table</span>
             </Link>
           </li>
         </ul>
