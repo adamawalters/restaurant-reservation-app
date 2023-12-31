@@ -48,15 +48,29 @@ function Dashboard() {
       <main style={{height: "100%", overflow: "hidden"}}>
         <h1>Dashboard</h1>
         <ErrorAlert error={reservationsError} />
-        <div className="d-md-flex mb-3 justify-content-center">
-          <h4 className="mb-0">Reservations for {date}</h4>
+        <div className="card mb-4 box-shadow">
+          <div className="card-header py-0">
+            <div className="d-flex mb-0 justify-content-center">
+              <h5 className="mb-0">Reservations for {date}</h5>
+            </div>
+          </div>
+          <div className="card-header py-0">
+            <ReservationListNav date={date} setDate={setDate} />
+          </div>
+          <div className="card-body p-0">
+            <ReservationList setError={setReservationsError} reservations={reservations} setUpdateReservations={setUpdateReservations} />
+          </div>
         </div>
-        <ReservationListNav date={date} setDate={setDate} />
-        <ReservationList setError={setReservationsError} reservations={reservations} setUpdateReservations={setUpdateReservations} />
-        <div className="d-md-flex mb-3 justify-content-center">
-          <h4 className="mb-0">Restaurant Table Status</h4>
+        <div className="card mb-4 box-shadow">
+          <div className="card-header py-0">
+            <div className="d-flex mb-0 justify-content-center">
+              <h5 className="mb-0">Restaurant Table Status</h5>
+            </div>
+          </div>
+          <div className="card-body p-0">
+            <TableList setUpdateReservations={setUpdateReservations} setError={setReservationsError}/>
+          </div>
         </div>
-        <TableList setUpdateReservations={setUpdateReservations} setError={setReservationsError}/>
       </main>
     );
   }

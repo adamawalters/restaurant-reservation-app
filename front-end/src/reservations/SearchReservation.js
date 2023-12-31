@@ -60,14 +60,17 @@ export default function SearchReservation() {
           </button>
         </div>
       </div>
-      {reservations ? (
-        <ReservationList
-          reservations={reservations}
-          setUpdateReservations={handleSumbit}
-          setError={setError}
-        />
-      ) : null}
-      {notFound ? <h4>No reservations found</h4> : null}
+      <div className="card mb-4 box-shadow">
+        {reservations ? (
+        
+          <ReservationList
+            reservations={reservations}
+            setUpdateReservations={handleSumbit}
+            setError={setError}
+          />
+        ) : null}
+        {notFound ? <h4>No reservations found</h4> : null}
+      </div>
     </main>
   );
 }
