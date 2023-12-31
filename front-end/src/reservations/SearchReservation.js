@@ -36,7 +36,7 @@ export default function SearchReservation() {
   }
 
   return (
-    <main>
+    <main style={{height: "100%", overflow: "hidden"}}>
       <h1>Search for Reservation</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">

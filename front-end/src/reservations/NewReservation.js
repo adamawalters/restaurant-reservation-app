@@ -83,7 +83,7 @@ function NewReservation() {
   }
 
   return (
-    <main>
+    <main style={{height: "100%", overflow: "hidden"}}>
       <h1>New Reservation</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Create a new reservation</h4>

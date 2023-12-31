@@ -10,3 +10,9 @@ body, html, #root{
 main {
   padding: 0% 2%;
 }
+
+@media screen and (min-width: 768px) {
+  #main-row {
+    height: 100%;
+  }
+}

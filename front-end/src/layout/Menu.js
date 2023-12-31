@@ -30,6 +30,7 @@ function Menu() {
       newTable.current.className = `nav-link active`
     }
   }, [pathname]) 
+  
 
 
 
@@ -82,7 +83,7 @@ function Menu() {
           </li>
           <li className="nav-item mx-1 mx-md-0 my-1 my-md-0">
             <Link
-              className="nav-link"
+              className="nav-link text-white"
               to="/tables/new"
               ref={newTable}
             >
