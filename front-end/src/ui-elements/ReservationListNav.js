@@ -24,8 +24,8 @@ function ReservationListNav({ date, setDate }) {
   }
 
   const nav = (
-    <div className="nav justify-content-between">
-      <div className="wrapper">
+    <div className="nav justify-content-between flex-nowrap">
+      <div className="wrapper text-center">
         <span className="oi oi-arrow-left" />
         <button
           onClick={decrementDate}
@@ -35,7 +35,7 @@ function ReservationListNav({ date, setDate }) {
           Previous Day
         </button>
       </div>
-      <div className="wrapper">
+      <div className="wrapper text-center">
         <span className="oi oi-timer" />
         <button
           onClick={goToToday}
@@ -45,7 +45,7 @@ function ReservationListNav({ date, setDate }) {
           Today
         </button>
       </div>
-      <div className="wrapper">
+      <div className="wrapper text-center">
       <span className="oi oi-arrow-right" />
         <button
           onClick={incrementDate}

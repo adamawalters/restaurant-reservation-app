@@ -30,7 +30,7 @@ function ReservationList({ reservations, setUpdateReservations , setError}) {
 
   return (
     <div className="overflow-auto" style={{ maxHeight: "100%"}}>
-      <table className="table table-striped table-hover table-responsive-md table-sm small" style={{tableLayout : "fixed"}}>
+      <table className="table table-striped table-hover table-responsive-md table-sm small" >
         <caption>List of reservations</caption>
         <thead>{tableHeader}</thead>
         <tbody>{reservationRows}</tbody>
