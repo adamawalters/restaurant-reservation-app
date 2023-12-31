@@ -10,11 +10,9 @@ function ReservationList({ reservations, setUpdateReservations , setError}) {
       <th>Mobile Number</th>
       <th>Date</th>
       <th>Time</th>
-      <th>People</th>
+      <th className="">People</th>
       <th>Status</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th className="col-md-2"></th>
     </tr>
   );
 

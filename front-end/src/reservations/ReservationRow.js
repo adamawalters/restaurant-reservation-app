@@ -32,15 +32,15 @@ function ReservationRow({ reservation, setUpdateReservations, setError }) {
       <td className="align-middle">{reservation.reservation_time}</td>
       <td className="align-middle">{reservation.people}</td>
       <td className="align-middle"><span data-reservation-id-status={reservation.reservation_id}>{reservation.status}</span></td>
-      <td className="align-middle">
+      <td className="col-md-2 align-middle text-center">
         {reservation.status === "booked" ? (
           <Link className="btn btn-primary btn-sm" to={`/reservations/${reservation.reservation_id}/seat`}>
             Seat
           </Link>
         ) : null}
+        <Link className="ml-1 btn btn-info btn-sm" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>
+        <Link to="" className="ml-1 btn btn-danger btn-sm" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</Link>
       </td>
-      <td className="align-middle"><Link className="btn btn-info btn-sm" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></td>
-      <td className="align-middle"><Link to="" className=" btn btn-danger btn-sm" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</Link></td>
     </tr>
   );
 }
