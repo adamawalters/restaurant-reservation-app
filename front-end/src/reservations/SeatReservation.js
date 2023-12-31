@@ -9,7 +9,8 @@ import {
   useHistory,
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
-import ReservationList from "./ReservationList";
+import SeatReservationList from "./SeatReservationList";
+
 
 function SeatReservation() {
   const [tables, setTables] = useState([]);
@@ -31,7 +32,7 @@ function SeatReservation() {
     } catch (error) {
       setTablesError(error);
     }
-    return ()=> abortController.abort();
+    return () => abortController.abort();
   }
 
   function validateTable(e) {
@@ -44,8 +45,8 @@ function SeatReservation() {
     if (reservation.people > selectedTable.capacity) {
       errorString += `Table capacity must be greater than or equal to reservation size.`;
     }
-    if(reservation.status === "seated") {
-      errorString += `Reservation ${reservation.reservation_id} is already seated.`
+    if (reservation.status === "seated") {
+      errorString += `Reservation ${reservation.reservation_id} is already seated.`;
     }
     errorString
       ? setTablesError({ message: errorString })
@@ -73,8 +74,6 @@ function SeatReservation() {
     loadReservation();
     return () => abortController.abort();
   }, [reservation_id]);
-
-  
 
   /* Load available tables from DB */
   useEffect(() => {
@@ -104,23 +103,38 @@ function SeatReservation() {
     <main>
       <h1>Seat Reservation</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">{`Assign a table to reservation ${reservation_id}.`}</h4>
+        <h4 className="mb-0">{`Assign a table to reservation ${reservation_id}`}</h4>
       </div>
       <ErrorAlert error={tablesError} />
-      {reservation ? <ReservationList reservations={[reservation]} /> : null}
+      {reservation ? (
+        <>
+          <h4>Reservation Information</h4>
+          <SeatReservationList reservation={reservation} />
+        </>
+      ) : null}
       <h4> Choose a table </h4>
       <form onSubmit={validateTable} onChange={handleChange}>
         <div className="form-group">
-          <select className="form-control" name="table_id" value={selectedTableID} defaultValue="" required>
-            <option value="">
-              None
-            </option>
+          <select
+            className="form-control"
+            name="table_id"
+            value={selectedTableID}
+            defaultValue=""
+            required
+          >
+            <option value="">None</option>
             {options}
           </select>
         </div>
         <div className="d-flex justify-content-between">
-          <button className="btn btn-primary" type="submit">Submit</button>
-          <button className="btn btn-danger" type="button" onClick={() => history.goBack()}>
+          <button className="btn btn-primary" type="submit">
+            Submit
+          </button>
+          <button
+            className="btn btn-danger"
+            type="button"
+            onClick={() => history.goBack()}
+          >
             Cancel
           </button>
         </div>

@@ -24,7 +24,7 @@ function ReservationRow({ reservation, setUpdateReservations, setError }) {
 
   return (
     <tr>
-      <td className="align-middle">{reservation.reservation_id}</td>
+      <td className="d-none d-md-table-cell align-middle">{reservation.reservation_id}</td>
       <td className="align-middle">{reservation.first_name}</td>
       <td className="align-middle">{reservation.last_name}</td>
       <td className="align-middle">{reservation.mobile_number}</td>
@@ -34,13 +34,13 @@ function ReservationRow({ reservation, setUpdateReservations, setError }) {
       <td className="align-middle"><span data-reservation-id-status={reservation.reservation_id}>{reservation.status}</span></td>
       <td className="align-middle">
         {reservation.status === "booked" ? (
-          <Link className="btn btn-primary" to={`/reservations/${reservation.reservation_id}/seat`}>
+          <Link className="btn btn-primary btn-sm" to={`/reservations/${reservation.reservation_id}/seat`}>
             Seat
           </Link>
         ) : null}
       </td>
-      <td className="align-middle"><Link className="btn btn-info" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></td>
-      <td className="align-middle"><Link to="" className=" btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</Link></td>
+      <td className="align-middle"><Link className="btn btn-info btn-sm" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></td>
+      <td className="align-middle"><Link to="" className=" btn btn-danger btn-sm" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelReservation}>Cancel</Link></td>
     </tr>
   );
 }

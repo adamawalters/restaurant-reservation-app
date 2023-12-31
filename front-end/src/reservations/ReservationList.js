@@ -4,7 +4,7 @@ import ReservationRow from "./ReservationRow";
 function ReservationList({ reservations, setUpdateReservations , setError}) {
   const tableHeader = (
     <tr>
-      <th>ID</th>
+      <th className="d-none d-md-table-cell">ID</th>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Mobile Number</th>
@@ -32,7 +32,7 @@ function ReservationList({ reservations, setUpdateReservations , setError}) {
 
   return (
     <div className="overflow-auto" style={{ maxHeight: "100%"}}>
-      <table className="table table-striped table-hover table-sm" style={{tableLayout : "fixed"}}>
+      <table className="table table-striped table-hover table-responsive-md table-sm small" style={{tableLayout : "fixed"}}>
         <caption>List of reservations</caption>
         <thead>{tableHeader}</thead>
         <tbody>{reservationRows}</tbody>
