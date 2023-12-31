@@ -46,7 +46,6 @@ function ReservationListNav({ date, setDate }) {
         </button>
       </div>
       <div className="wrapper text-center">
-      <span className="oi oi-arrow-right" />
         <button
           onClick={incrementDate}
           className="btn btn-link nav-link d-inline"
@@ -54,6 +53,7 @@ function ReservationListNav({ date, setDate }) {
         >
           Next Day
         </button>
+        <span className="oi oi-arrow-right" />
       </div>
     </div>
   );

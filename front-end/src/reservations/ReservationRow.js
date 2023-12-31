@@ -4,10 +4,8 @@ import { updateReservationStatus } from "../utils/api";
 
 function ReservationRow({ reservation, setUpdateReservations, setError }) {
 
-
-
-  async function cancelReservation(){
-
+  async function cancelReservation(e){
+    e.preventDefault();
     const abortController = new AbortController();
     const canCancel = window.confirm("Do you want to cancel this reservation? This cannot be undone.")
     if(canCancel) {
@@ -18,7 +16,6 @@ function ReservationRow({ reservation, setUpdateReservations, setError }) {
         setError(error);
       }
     } 
-
     return ()=> abortController.abort();
   }
 
