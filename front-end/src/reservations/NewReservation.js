@@ -44,7 +44,7 @@ function NewReservation() {
     let errorString = "";
 
     if (reservationDate.getTime() < now.getTime()) {
-      errorString += `Front end validation: Reservation must be in the future.`;
+      errorString += `Reservation must be in the future.`;
     }
 
     if (weekDay === 2) {
