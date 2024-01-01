@@ -126,7 +126,7 @@ async function reservationExists(req, res, next) {
   });
 }
 
-async function tableIsOccupied(req, res, next){
+function tableIsOccupied(req, res, next){
   const { table } = res.locals;
 
   if (!table.reservation_id) {
@@ -225,5 +225,5 @@ module.exports = {
     reservationIsSeated,
     asyncErrorBoundary(update),
   ],
-  delete: [asyncErrorBoundary(tableExists), asyncErrorBoundary(tableIsOccupied), asyncErrorBoundary(deleteReservation)],
+  delete: [asyncErrorBoundary(tableExists), tableIsOccupied, asyncErrorBoundary(deleteReservation)],
 };

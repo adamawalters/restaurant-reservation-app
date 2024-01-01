@@ -210,7 +210,7 @@ async function reservationExists(req, res, next) {
 const validReservationStatuses = ["booked", "seated", "finished", "cancelled"];
 const requiredReservationStatusProperties = ["status"];
 
-async function reservationStatusIsValid(req, res, next) {
+function reservationStatusIsValid(req, res, next) {
   const {
     data: { status },
   } = req.body;
@@ -224,7 +224,7 @@ async function reservationStatusIsValid(req, res, next) {
   next();
 }
 
-async function reservationStatusIsValidForCreationEditing(req, res, next) {
+function reservationStatusIsValidForCreationEditing(req, res, next) {
   const { data: { status } = {} } = req.body;
   if (status && status !== "booked") {
     return next({
@@ -235,7 +235,7 @@ async function reservationStatusIsValidForCreationEditing(req, res, next) {
   next();
 }
 
-async function statusIsFinished(req, res, next) {
+function statusIsFinished(req, res, next) {
   const { reservation } = res.locals;
   if (reservation.status === "finished") {
     return next({
@@ -247,7 +247,7 @@ async function statusIsFinished(req, res, next) {
   next();
 }
 
-async function statusIsNotBooked(req, res, next) {
+function statusIsNotBooked(req, res, next) {
   const { reservation } = res.locals;
   if (reservation.status !== "booked") {
     return next({
@@ -290,6 +290,6 @@ module.exports = {
     reservationIsFutureAndRestaurantIsOpen,
     reservationStatusIsValidForCreationEditing,
     statusIsNotBooked,
-    update,
+    asyncErrorBoundary(update),
   ],
 };
