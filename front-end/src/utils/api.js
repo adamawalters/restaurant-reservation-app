@@ -229,18 +229,13 @@ export async function updateTable(table_id, reservation_id, signal) {
  * The AbortController signal
  * @returns null
  */
-export async function removeReservationFromTable(tableID, reservationID, signal){
+export async function removeReservationFromTable(tableID, signal){
   const url = new URL(`${API_BASE_URL}/tables/${tableID}/seat`);
   await fetchJson(
     url,
     {
       headers,
       method: "DELETE",
-      body: JSON.stringify({
-        data: {
-          reservation_id : reservationID
-        },
-      }),
       signal,
     },
     []
