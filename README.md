@@ -3,7 +3,7 @@
 
 ## Summary
 This is a full-stack application designed for restaurant staff. It lets staff members manage reservations and also keep track of free tables while customers are dining. 
-The application is deployed [at this link]([https://render.com/](https://restaurant-reservation-app-8k8w.onrender.com).
+The application is deployed [at this link](https://restaurant-reservation-app-8k8w.onrender.com).
 
 ### Reservation management features - restaurant staff can:
 1. Log reservations into the system to track them
