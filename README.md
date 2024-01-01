@@ -1,9 +1,8 @@
 # Restaurant Reservation System
 
-
 ## Summary
-This is a full-stack application designed for restaurant staff. It lets staff members manage reservations and also keep track of free tables while customers are dining. 
-The application is deployed [at this link](https://restaurant-reservation-app-8k8w.onrender.com).
+This is an application designed for restaurant staff to help staff members manage & update reservations and also keep track of which tables in the restaurant are free and occupied while customers are dining. 
+The application is deployed [at this link](https://restaurant-reservation-app-8k8w.onrender.com). The tech stack is ReactJS, HTML, and CSS for the frontend, Node & Express for the server, and PostgreSQL for the database.
 
 ### Reservation management features - restaurant staff can:
 1. Log reservations into the system to track them
