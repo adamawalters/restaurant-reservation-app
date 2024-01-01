@@ -19,7 +19,6 @@ app.use("/reservations", reservationsRouter);
 app.use("/tables", tablesRouter);
 
 app.use(notFound);
-//app.use(errorHandler.logErrors);
 app.use(errorHandler.errorHandler);
 
 module.exports = app;
