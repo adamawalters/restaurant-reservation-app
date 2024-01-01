@@ -4,7 +4,8 @@
 This is an application designed for restaurant staff to help staff members manage & update reservations and also keep track of which tables in the restaurant are free and occupied while customers are dining. 
 The application is deployed [at this link](https://restaurant-reservation-app-8k8w.onrender.com). The tech stack is ReactJS, HTML, and CSS for the frontend, Node & Express for the server, and PostgreSQL for the database.
 
-### Reservation management features - restaurant staff can:
+### Reservation management features:
+Restaurant staff can: 
 1. Log reservations into the system to track them
 2. View reservations for a certain date
 3. Search for reservations by phone number
@@ -12,7 +13,8 @@ The application is deployed [at this link](https://restaurant-reservation-app-8k
 5. Cancel reservations
 6. Seat a reservation at a table (assign a reservation to a table)
 
-### Table management features - restaurant staff can:
+### Table management features:
+Restaurant staff can: 
 1. View which tables are free and occupied
 2. Finish a reservation and free up a table so another reservation can be assigned to it
 
