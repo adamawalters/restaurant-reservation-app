@@ -14,14 +14,15 @@ function TableList({setUpdateReservations, setError}) {
         const response = await listTables(abortController.signal);
         setTables(response);
       } catch (error) {
-        //console.log(`Table Error!`);
+        setError(error)
       }
     }
 
     loadTables();
 
     return () => abortController.abort();
-  }, [updateTables]);
+  }, [updateTables, setError]);
+
 
   const tableHeader = (
     <tr>

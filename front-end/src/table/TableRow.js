@@ -4,13 +4,14 @@ import { removeReservationFromTable } from "../utils/api";
 function TableRow({ table, setTables, setUpdateReservations, setError }) {
 
   async function handleFinish(e){
+  
     const abortController = new AbortController();
     const canFinish = window.confirm(`Is this table ready to seat new guests? This cannot be undone.`);
     if(canFinish) {
       try {
         await removeReservationFromTable(table.table_id, abortController.signal);
-        setTables((current) => !current)
         setUpdateReservations((current) => !current)
+        setTables((current) => !current)
       } catch (error) {
         setError(error)
       }
