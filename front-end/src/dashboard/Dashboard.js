@@ -23,25 +23,26 @@ function Dashboard() {
 
   useEffect(() => {
     setReservations(null);
-    const abortController = new AbortController();
     setReservationsError(null);
 
-    async function loadDashboard() {
-      try {
-        const response = await listReservations(
-          { date },
-          abortController.signal
-        );
-        setReservations(response);
-      } catch (error) {
-        setReservationsError(error);
-      }
-    }
+    loadReservations();
 
-    loadDashboard();
-
-    return () => abortController.abort();
   }, [date, updateReservations]);
+
+  async function loadReservations() {
+    const abortController = new AbortController();
+
+    try {
+      const response = await listReservations(
+        { date },
+        abortController.signal
+      );
+      setReservations(response);
+    } catch (error) {
+      setReservationsError(error);
+    }
+    return () => abortController.abort();
+  }
 
   if (reservations) {
     return (
@@ -58,7 +59,7 @@ function Dashboard() {
             <ReservationListNav date={date} setDate={setDate} />
           </div>
           <div className="card-body p-0">
-            <ReservationList setError={setReservationsError} reservations={reservations} setUpdateReservations={setUpdateReservations} />
+            <ReservationList setError={setReservationsError} reservations={reservations} loadReservations={loadReservations} setUpdateReservations={setUpdateReservations} />
           </div>
         </div>
         <div className="card mb-4 box-shadow">

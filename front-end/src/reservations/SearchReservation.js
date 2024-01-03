@@ -13,7 +13,7 @@ export default function SearchReservation() {
     setMobileNumber(e.target.value);
   }
 
-  async function handleSumbit() {
+  async function loadReservations() {
     setNotFound(false);
     setReservations(null);
     const abortController = new AbortController();
@@ -52,10 +52,10 @@ export default function SearchReservation() {
           placeholder="Enter a customer's phone number"
           value={mobileNumber}
           onChange={handleChange}
-          onKeyDown={(e)=> {if(e.key === "Enter") handleSumbit()}}
+          onKeyDown={(e)=> {if(e.key === "Enter") loadReservations()}}
         />
         <div className="input-group-append">
-          <button className="btn btn-primary" type="submit" onClick={handleSumbit}>
+          <button className="btn btn-primary" type="submit" onClick={loadReservations}>
             Find
           </button>
         </div>
@@ -65,7 +65,7 @@ export default function SearchReservation() {
         
           <ReservationList
             reservations={reservations}
-            setUpdateReservations={handleSumbit}
+            loadReservations={loadReservations}
             setError={setError}
           />
         ) : null}

@@ -1,7 +1,7 @@
 import React from "react";
 import ReservationRow from "./ReservationRow";
 
-function ReservationList({ reservations, setUpdateReservations , setError}) {
+function ReservationList({ reservations, loadReservations , setError}) {
   const tableHeader = (
     <tr>
       <th className="d-none d-md-table-cell">ID</th>
@@ -22,7 +22,7 @@ function ReservationList({ reservations, setUpdateReservations , setError}) {
         <ReservationRow
           key={reservation.reservation_id}
           reservation={reservation}
-          setUpdateReservations={setUpdateReservations}
+          loadReservations={loadReservations}
           setError={setError}
         />
       );

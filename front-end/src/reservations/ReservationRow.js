@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { updateReservationStatus } from "../utils/api";
 
-function ReservationRow({ reservation, setUpdateReservations, setError }) {
+function ReservationRow({ reservation, loadReservations, setError }) {
 
   async function cancelReservation(e){
     e.preventDefault();
@@ -11,7 +11,7 @@ function ReservationRow({ reservation, setUpdateReservations, setError }) {
     if(canCancel) {
       try {
         await updateReservationStatus(reservation.reservation_id, "cancelled", abortController.signal);
-        setUpdateReservations((current) => !current);
+        loadReservations();
       } catch (error) {
         setError(error);
       }
