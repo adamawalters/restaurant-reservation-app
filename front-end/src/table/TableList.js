@@ -4,24 +4,25 @@ import TableRow from "./TableRow";
 
 function TableList({loadReservations, setError}) {
   const [tables, setTables] = useState([]);
-  const [updateTables, setUpdateTables] = useState(false);
 
   useEffect(() => {
+
     const abortController = new AbortController();
-
-    async function loadTables() {
-      try {
-        const response = await listTables(abortController.signal);
-        setTables(response);
-      } catch (error) {
-        setError(error)
-      }
-    }
-
-    loadTables();
-
+    
+    loadTables(abortController.signal);
     return () => abortController.abort();
-  }, [updateTables, setError]);
+  }, [setError]);
+
+
+  async function loadTables(signal) {
+
+    try {
+      const response = await listTables(signal);
+      setTables(response);
+    } catch (error) {
+      setError(error)
+    }
+  }
 
 
   const tableHeader = (
@@ -36,7 +37,7 @@ function TableList({loadReservations, setError}) {
   );
 
   const tableRows = tables.map((table) => {
-    return <TableRow setError={setError} key={table.table_id} table={table} setTables={setUpdateTables} loadReservations={loadReservations} />;
+    return <TableRow setError={setError} key={table.table_id} table={table} loadTables={loadTables} loadReservations={loadReservations} />;
   });
 
   return (

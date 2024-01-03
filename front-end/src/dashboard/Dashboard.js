@@ -16,32 +16,30 @@ import TableList from "../table/TableList";
 function Dashboard() {
   const [reservations, setReservations] = useState(null);
   const [reservationsError, setReservationsError] = useState(null);
-  const [updateReservations, setUpdateReservations] = useState(false);
   const queryParams = useQuery();
   const initialDate = queryParams.get("date") || today();
   const [date, setDate] = useState(initialDate);
 
   useEffect(() => {
+    const abortController = new AbortController();
     setReservations(null);
     setReservationsError(null);
 
-    loadReservations();
+    loadReservations(abortController.signal);
+    return () => abortController.abort();
+  }, [date]);
 
-  }, [date, updateReservations]);
-
-  async function loadReservations() {
-    const abortController = new AbortController();
+  async function loadReservations(signal) {
 
     try {
       const response = await listReservations(
         { date },
-        abortController.signal
+        signal
       );
       setReservations(response);
     } catch (error) {
       setReservationsError(error);
     }
-    return () => abortController.abort();
   }
 
   if (reservations) {
