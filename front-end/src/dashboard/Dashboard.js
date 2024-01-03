@@ -59,7 +59,7 @@ function Dashboard() {
             <ReservationListNav date={date} setDate={setDate} />
           </div>
           <div className="card-body p-0">
-            <ReservationList setError={setReservationsError} reservations={reservations} loadReservations={loadReservations} setUpdateReservations={setUpdateReservations} />
+            <ReservationList setError={setReservationsError} reservations={reservations} loadReservations={loadReservations} />
           </div>
         </div>
         <div className="card mb-4 box-shadow">
@@ -69,7 +69,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="card-body p-0">
-            <TableList setUpdateReservations={setUpdateReservations} setError={setReservationsError}/>
+            <TableList loadReservations={loadReservations} setError={setReservationsError}/>
           </div>
         </div>
       </main>

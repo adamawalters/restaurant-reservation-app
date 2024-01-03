@@ -1,7 +1,7 @@
 import React from "react";
 import { removeReservationFromTable } from "../utils/api";
 
-function TableRow({ table, setTables, setUpdateReservations, setError }) {
+function TableRow({ table, setTables, loadReservations, setError }) {
 
   async function handleFinish(e){
   
@@ -10,7 +10,7 @@ function TableRow({ table, setTables, setUpdateReservations, setError }) {
     if(canFinish) {
       try {
         await removeReservationFromTable(table.table_id, abortController.signal);
-        setUpdateReservations((current) => !current)
+        await loadReservations()
         setTables((current) => !current)
       } catch (error) {
         setError(error)

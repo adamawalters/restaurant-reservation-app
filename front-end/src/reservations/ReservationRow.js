@@ -11,7 +11,7 @@ function ReservationRow({ reservation, loadReservations, setError }) {
     if(canCancel) {
       try {
         await updateReservationStatus(reservation.reservation_id, "cancelled", abortController.signal);
-        loadReservations();
+        await loadReservations();
       } catch (error) {
         setError(error);
       }
