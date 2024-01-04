@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { listTables } from "../utils/api";
 import TableRow from "./TableRow";
 
 function TableList({ loadReservations, setError }) {
   const [tables, setTables] = useState([]);
 
+  const loadTables = useCallback(
+    async (signal) => {
+      try {
+        const response = await listTables(signal);
+        setTables(response);
+      } catch (error) {
+        setError(error);
+      }
+    },
+    [setError]
+  );
+
   useEffect(() => {
     const abortController = new AbortController();
 
     loadTables(abortController.signal);
     return () => abortController.abort();
-  }, [setError]);
-
-  async function loadTables(signal) {
-    try {
-      const response = await listTables(signal);
-      setTables(response);
-    } catch (error) {
-      setError(error);
-    }
-  }
+  }, [loadTables]);
 
   const tableHeader = (
     <tr>

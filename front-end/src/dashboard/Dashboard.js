@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "../reservations/ReservationList";
@@ -20,6 +20,18 @@ function Dashboard() {
   const initialDate = queryParams.get("date") || today();
   const [date, setDate] = useState(initialDate);
 
+  const loadReservations = useCallback(
+    async (signal) => {
+      try {
+        const response = await listReservations({ date }, signal);
+        setReservations(response);
+      } catch (error) {
+        setReservationsError(error);
+      }
+    },
+    [date]
+  );
+
   useEffect(() => {
     const abortController = new AbortController();
     setReservations(null);
@@ -27,16 +39,7 @@ function Dashboard() {
 
     loadReservations(abortController.signal);
     return () => abortController.abort();
-  }, [date]);
-
-  async function loadReservations(signal) {
-    try {
-      const response = await listReservations({ date }, signal);
-      setReservations(response);
-    } catch (error) {
-      setReservationsError(error);
-    }
-  }
+  }, [date, loadReservations]);
 
   if (reservations) {
     return (
