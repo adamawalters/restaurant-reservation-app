@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createReservation } from "../utils/api";
 import ReservationForm from "./ReservationForm";
 
-
 function NewReservation() {
   const [newReservationError, setNewReservationError] = useState(null);
   const history = useHistory();
@@ -33,11 +32,13 @@ function NewReservation() {
     e.preventDefault();
     setNewReservationError(null);
 
-    const [year, month, day] = reservationForm.reservation_date.split("-")
-    const [hour, minutes] = reservationForm.reservation_time.split(":").map((time) => Number(time));
+    const [year, month, day] = reservationForm.reservation_date.split("-");
+    const [hour, minutes] = reservationForm.reservation_time
+      .split(":")
+      .map((time) => Number(time));
 
-    const reservationDate = new Date(year, month-1, day);
-    reservationDate.setHours(hour, minutes)
+    const reservationDate = new Date(year, month - 1, day);
+    reservationDate.setHours(hour, minutes);
     const weekDay = reservationDate.getDay();
     const now = new Date();
 
@@ -64,39 +65,31 @@ function NewReservation() {
       : submitNewReservation();
   }
 
-
   async function submitNewReservation() {
-
-   const abortController = new AbortController();
     try {
-      const response = await createReservation(
-        reservationForm,
-        abortController.signal
-      );
+      const response = await createReservation(reservationForm);
       setReservationForm({ ...defaultReservationForm });
       history.push(`/dashboard?date=${response.reservation_date}`);
     } catch (error) {
       setNewReservationError(error);
     }
-
-    return ()=>abortController.abort();
   }
 
   return (
-    <main style={{height: "100%", overflow: "hidden"}}>
+    <main style={{ height: "100%", overflow: "hidden" }}>
       <h1>New Reservation</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Create a new reservation</h4>
       </div>
       <ErrorAlert error={newReservationError} />
-      <ReservationForm history={history} reservationForm={reservationForm} handleChange={handleChange} submitHandler={validateReservation}/>
+      <ReservationForm
+        history={history}
+        reservationForm={reservationForm}
+        handleChange={handleChange}
+        submitHandler={validateReservation}
+      />
     </main>
   );
-  
-
 }
-
-
-  
 
 export default NewReservation;

@@ -1,7 +1,7 @@
 import React from "react";
 import ReservationRow from "./ReservationRow";
 
-function ReservationList({ reservations, loadReservations , setError}) {
+function ReservationList({ reservations, loadReservations, setError }) {
   const tableHeader = (
     <tr>
       <th className="d-none d-md-table-cell">ID</th>
@@ -16,21 +16,20 @@ function ReservationList({ reservations, loadReservations , setError}) {
     </tr>
   );
 
-  const reservationRows = reservations
-    .map((reservation) => {
-      return (
-        <ReservationRow
-          key={reservation.reservation_id}
-          reservation={reservation}
-          loadReservations={loadReservations}
-          setError={setError}
-        />
-      );
-    });
+  const reservationRows = reservations.map((reservation) => {
+    return (
+      <ReservationRow
+        key={reservation.reservation_id}
+        reservation={reservation}
+        loadReservations={loadReservations}
+        setError={setError}
+      />
+    );
+  });
 
   return (
-    <div className="overflow-auto" style={{ maxHeight: "100%"}}>
-      <table className="table table-striped table-hover table-responsive-md table-sm small" >
+    <div className="overflow-auto" style={{ maxHeight: "100%" }}>
+      <table className="table table-striped table-hover table-responsive-md table-sm small">
         <caption>List of reservations</caption>
         <thead>{tableHeader}</thead>
         <tbody>{reservationRows}</tbody>

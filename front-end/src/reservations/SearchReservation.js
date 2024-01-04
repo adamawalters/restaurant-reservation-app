@@ -16,12 +16,10 @@ export default function SearchReservation() {
   async function loadReservations() {
     setNotFound(false);
     setReservations(null);
-    const abortController = new AbortController();
 
     try {
       const response = await listReservations(
-        { mobile_number: mobileNumber },
-        abortController.signal
+        { mobile_number: mobileNumber }
       );
       if (response.length) {
         setReservations(response);
@@ -32,7 +30,6 @@ export default function SearchReservation() {
       setError(error);
     }
 
-    return ()=> abortController.abort();
   }
 
   return (

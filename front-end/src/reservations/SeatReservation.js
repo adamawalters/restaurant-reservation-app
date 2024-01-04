@@ -11,7 +11,6 @@ import {
 } from "react-router-dom/cjs/react-router-dom.min";
 import SeatReservationList from "./SeatReservationList";
 
-
 function SeatReservation() {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
@@ -21,18 +20,12 @@ function SeatReservation() {
   const history = useHistory();
 
   async function addReservationToTable() {
-    const abortController = new AbortController();
     try {
-      await updateTable(
-        Number(selectedTableID),
-        reservation_id,
-        abortController.signal
-      );
+      await updateTable(Number(selectedTableID), reservation_id);
       history.push(`/`);
     } catch (error) {
       setTablesError(error);
     }
-    return () => abortController.abort();
   }
 
   function validateTable(e) {
