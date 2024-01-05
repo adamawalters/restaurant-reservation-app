@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
-
 import { Link, useLocation } from "react-router-dom";
+import icon from "../images/icon.png"
 
 /**
  * Defines the menu for this application.
@@ -42,8 +42,9 @@ function Menu() {
           className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0 mb-md-3"
           to="/"
         >
-          <div className="sidebar-brand-text mx-3">
-            <span>Periodic Tables</span>
+          <div className="sidebar-brand-text mx-3 d-flex align-items-center ">
+            <img src={icon} style={{height: "40px", width: "40px", marginRight: "5px"}}/>
+            <span>ReserveServe</span>
           </div>
         </Link>
         <hr className="sidebar-divider my-0" />
