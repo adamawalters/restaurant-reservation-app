@@ -40,7 +40,6 @@ export default function EditReservation() {
     });
   }
 
-
   function validateReservation(e) {
     e.preventDefault();
     setError(null);
@@ -73,43 +72,40 @@ export default function EditReservation() {
       errorString += `Last reservation is at 9:30 PM. `;
     }
 
-    if((reservationForm.status !== "booked")) {
-        errorString += `Reservation status must be "booked" to edit it. `
+    if (reservationForm.status !== "booked") {
+      errorString += `Reservation status must be "booked" to edit it. `;
     }
 
-    errorString ? setError({ message: errorString }) : submitEditedReservation();
+    errorString
+      ? setError({ message: errorString })
+      : submitEditedReservation();
   }
 
   async function submitEditedReservation() {
-    const abortController = new AbortController();
     try {
-      const response = await editReservation(
-        reservationForm,
-        abortController.signal
-      );
+      const response = await editReservation(reservationForm);
       history.push(`/dashboard?date=${response.reservation_date}`);
     } catch (error) {
       setError(error);
     }
-
-    return ()=> abortController.abort();
   }
 
-  if(reservationForm) return (
-    <main>
-      <h1>Edit Reservation</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Update the reservation</h4>
-      </div>
-      <ErrorAlert error={error} />
-      <ReservationForm
-        history={history}
-        reservationForm={reservationForm}
-        handleChange={handleChange}
-        submitHandler={validateReservation}
-      />
-    </main>
-  );
+  if (reservationForm)
+    return (
+      <main>
+        <h1>Edit Reservation</h1>
+        <div className="d-md-flex mb-3">
+          <h4 className="mb-0">Update the reservation</h4>
+        </div>
+        <ErrorAlert error={error} />
+        <ReservationForm
+          history={history}
+          reservationForm={reservationForm}
+          handleChange={handleChange}
+          submitHandler={validateReservation}
+        />
+      </main>
+    );
 
   return (
     <main>

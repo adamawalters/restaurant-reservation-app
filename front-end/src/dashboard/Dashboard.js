@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "../reservations/ReservationList";
@@ -16,36 +16,34 @@ import TableList from "../table/TableList";
 function Dashboard() {
   const [reservations, setReservations] = useState(null);
   const [reservationsError, setReservationsError] = useState(null);
-  const [updateReservations, setUpdateReservations] = useState(false);
   const queryParams = useQuery();
   const initialDate = queryParams.get("date") || today();
   const [date, setDate] = useState(initialDate);
 
-  useEffect(() => {
-    setReservations(null);
-    const abortController = new AbortController();
-    setReservationsError(null);
-
-    async function loadDashboard() {
+  const loadReservations = useCallback(
+    async (signal) => {
       try {
-        const response = await listReservations(
-          { date },
-          abortController.signal
-        );
+        const response = await listReservations({ date }, signal);
         setReservations(response);
       } catch (error) {
         setReservationsError(error);
       }
-    }
+    },
+    [date]
+  );
 
-    loadDashboard();
+  useEffect(() => {
+    const abortController = new AbortController();
+    setReservations(null);
+    setReservationsError(null);
 
+    loadReservations(abortController.signal);
     return () => abortController.abort();
-  }, [date, updateReservations]);
+  }, [date, loadReservations]);
 
   if (reservations) {
     return (
-      <main style={{height: "100%", overflow: "hidden"}}>
+      <main style={{ height: "100%", overflow: "hidden" }}>
         <h1>Dashboard</h1>
         <ErrorAlert error={reservationsError} />
         <div className="card mb-4 box-shadow">
@@ -58,7 +56,11 @@ function Dashboard() {
             <ReservationListNav date={date} setDate={setDate} />
           </div>
           <div className="card-body p-0">
-            <ReservationList setError={setReservationsError} reservations={reservations} setUpdateReservations={setUpdateReservations} />
+            <ReservationList
+              setError={setReservationsError}
+              reservations={reservations}
+              loadReservations={loadReservations}
+            />
           </div>
         </div>
         <div className="card mb-4 box-shadow">
@@ -68,7 +70,10 @@ function Dashboard() {
             </div>
           </div>
           <div className="card-body p-0">
-            <TableList setUpdateReservations={setUpdateReservations} setError={setReservationsError}/>
+            <TableList
+              loadReservations={loadReservations}
+              setError={setReservationsError}
+            />
           </div>
         </div>
       </main>
@@ -81,16 +86,13 @@ function Dashboard() {
       <div className="d-md-flex mb-3 justify-content-center">
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
-     <ErrorAlert error={reservationsError} /> 
+      <ErrorAlert error={reservationsError} />
       <ReservationListNav date={date} setDate={setDate} />
       <div className="d-flex justify-content-center">
         <h2 className="font-italic">Reservations loading</h2>
       </div>
     </main>
   );
-
 }
-
-
 
 export default Dashboard;

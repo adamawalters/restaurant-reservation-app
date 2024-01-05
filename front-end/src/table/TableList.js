@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { listTables } from "../utils/api";
 import TableRow from "./TableRow";
 
-function TableList({setUpdateReservations, setError}) {
+function TableList({ loadReservations, setError }) {
   const [tables, setTables] = useState([]);
-  const [updateTables, setUpdateTables] = useState(false);
+
+  const loadTables = useCallback(
+    async (signal) => {
+      try {
+        const response = await listTables(signal);
+        setTables(response);
+      } catch (error) {
+        setError(error);
+      }
+    },
+    [setError]
+  );
 
   useEffect(() => {
     const abortController = new AbortController();
 
-    async function loadTables() {
-      try {
-        const response = await listTables(abortController.signal);
-        setTables(response);
-      } catch (error) {
-        setError(error)
-      }
-    }
-
-    loadTables();
-
+    loadTables(abortController.signal);
     return () => abortController.abort();
-  }, [updateTables, setError]);
-
+  }, [loadTables]);
 
   const tableHeader = (
     <tr>
@@ -36,14 +36,22 @@ function TableList({setUpdateReservations, setError}) {
   );
 
   const tableRows = tables.map((table) => {
-    return <TableRow setError={setError} key={table.table_id} table={table} setTables={setUpdateTables} setUpdateReservations={setUpdateReservations} />;
+    return (
+      <TableRow
+        setError={setError}
+        key={table.table_id}
+        table={table}
+        loadTables={loadTables}
+        loadReservations={loadReservations}
+      />
+    );
   });
 
   return (
-    <div style={{maxHeight: "250px", overflow: "auto"}}>
+    <div style={{ maxHeight: "250px", overflow: "auto" }}>
       <table
         className="table table-striped table-hover table-sm"
-        style={{ height: "100px"}}
+        style={{ height: "100px" }}
       >
         <caption>List of tables</caption>
         <thead>{tableHeader}</thead>
