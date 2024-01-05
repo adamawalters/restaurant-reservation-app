@@ -142,7 +142,7 @@ export async function editReservation(reservationForm, signal) {
  * Creates a table.
  * @param tableForm
  * The data to use to create the table (an object with table_name and capacity fields)
- * @param signal
+ * @param signal 
  * The AbortController signal
  * @returns {Promise<{table}>}
  *  a promise that resolves to a table saved in the database with additional table_id, reservation_id, created_at, and updated_at fields.
