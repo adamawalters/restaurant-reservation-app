@@ -32,7 +32,7 @@ Restaurant staff can:
 ![New Reservation](https://github.com/adamawalters/restaurant-reservation-app/blob/main/screenshots/New_Reservation.png)
 
 4. ### New Table
-![New Table](https://github.com/adamawalters/restaurant-reservation-app/blob/dev/screenshots/New_Table.png?raw=true)
+![New Table](https://github.com/adamawalters/restaurant-reservation-app/blob/main/screenshots/New_Table.png)
 
 5. ### Search Reservation
 ![Search Reservation](https://github.com/adamawalters/restaurant-reservation-app/blob/dev/screenshots/Search_Reservation.png?raw=true)
