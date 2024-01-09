@@ -35,7 +35,7 @@ Restaurant staff can:
 ![New Table](https://github.com/adamawalters/restaurant-reservation-app/blob/main/screenshots/New_Table.png)
 
 5. ### Search Reservation
-![Search Reservation](https://github.com/adamawalters/restaurant-reservation-app/blob/dev/screenshots/Search_Reservation.png?raw=true)
+![Search Reservation](https://github.com/adamawalters/restaurant-reservation-app/blob/main/screenshots/Search_Reservation.png)
 
 ## API
 
