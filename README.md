@@ -26,7 +26,7 @@ Restaurant staff can:
 ![Dashboard](https://github.com/adamawalters/restaurant-reservation-app/blob/main/screenshots/Dashboard.png)
 
 2. ### Edit Reservation
-![Edit Reservation](https://github.com/adamawalters/restaurant-reservation-app/blob/dev/screenshots/Edit_Reservation.png?raw=true)
+![Edit Reservation](https://github.com/adamawalters/restaurant-reservation-app/blob/main/screenshots/Edit_Reservation.png)
 
 3. ### New Reservation
 ![New Reservation](https://github.com/adamawalters/restaurant-reservation-app/blob/dev/screenshots/New_Reservation.png?raw=true)
